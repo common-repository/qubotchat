@@ -1,0 +1,297 @@
+﻿/********************************************************************************
+* QuData Chat Builder Plugin.
+*
+* Page setup
+*
+* @copyright Copyright (C) 2021, qudata.com
+********************************************************************************/
+
+.page-setup{       
+    min-width:  var(--page-width);
+    min-height: var(--page-height);
+    width:      800px;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;        
+}    
+
+.page-setup .table-setup{
+    border:            none;
+}
+
+
+.page-setup .table-setup tr td, .page-setup .table-setup tr th{
+    border:            none;
+}
+
+
+.page-setup .icons{   
+    padding: 10px;    
+}    
+
+.page-setup .icons .list{
+    border: 1px solid black;
+    
+    margin: 20px 0px 10px 0px;
+    padding: 20px 10px 10px 10px;
+
+    position: relative;
+    display: flex;    
+    flex-direction:     row;
+    flex-wrap: wrap;
+}    
+
+.page-setup .icons .list .title{
+    position: absolute;
+    left: 5px;
+    top: -10px;
+
+    background-color: white;
+    padding: 0px 5px;
+    z-index: 2;
+}    
+
+.page-setup .icons .list .icon{   
+    margin:             10px;
+    display:            flex;        
+    flex-direction:     column;
+    align-items:        center;
+}    
+
+.page-setup .icons .list .icon img{
+    width:              50px;
+    height:             50px;    
+    margin-bottom:      10px;
+}    
+
+.page-setup .icons .list .icon input{
+    width:  20px !important;
+    height: 20px !important;        
+    margin-bottom: 5px;
+}    
+
+.page-setup .names{   
+    padding: 10px;    
+    border-width: thin;
+    border-top-style: dashed;    
+}    
+
+.page-setup .sizes{    
+    padding: 10px;
+    border-width: thin;
+    border-top-style: dashed;
+    display: flex;  
+    flex-direction: column;      
+}    
+
+
+.page-setup .sizes .description{
+    
+    margin-bottom: 10px;
+}
+
+.page-setup .sizes .size-pos{
+    display:            flex;      
+    flex-direction:     row;          
+}    
+
+.page-setup .sizes .size-pos .size{
+    padding: 10px;    
+    margin-right: 0px;
+
+    display: flex;  
+    flex-direction: column;          
+}
+ 
+.page-setup .styles{   
+    padding: 10px;    
+    border-width: thin;
+    border-top-style: dashed;
+}    
+
+.page-setup .styles .qubot-setup-sheck-style{
+    margin-top: 10px
+}
+
+
+.page-setup .custom{   
+    padding: 10px;    
+    border-width: thin;
+    border-top-style: dashed;    
+}    
+
+
+.page-setup .sizes .pos{    
+    padding: 10px 10px 10px 50px;    
+    width: 250;
+}    
+
+.page-setup .sizes .pos .window{
+    border: 2px solid black; 
+    width: 200px;
+    height: 150px;
+    margin-bottom: 10px;
+
+    position: relative;
+    display: flex;    
+    flex-direction: column;
+    justify-content: space-between;    
+}
+
+.page-setup .sizes .pos .window .caption {
+    position: absolute;
+    left: 5px;
+    top: -10px;
+
+    background-color: white;
+    padding: 0px 5px;
+    z-index: 2;
+}    
+
+.page-setup .sizes .pos .window .row{
+    flex: 1;
+    display: flex;    
+    flex-direction: row;          
+    justify-content: space-between;    
+}
+.page-setup .sizes .pos .window .block{    
+    flex: 1;
+    position: relative;
+}
+.page-setup .sizes .pos .window .block .lt{ position: absolute; right: -10px;  bottom: -10px; z-index: 3;}    
+.page-setup .sizes .pos .window .block .lb{ position: absolute; right: -10px;  top:    -10px; z-index: 3;}    
+.page-setup .sizes .pos .window .block .rt{ position: absolute; left:  -10px;  bottom: -10px; z-index: 3;}    
+.page-setup .sizes .pos .window .block .rb{ position: absolute; left : -10px;  top:    -10px; z-index: 3;}    
+
+
+/********************************************************************************
+                                    Styles
+********************************************************************************/
+
+
+.page-setup .styles .list{       
+    display: flex;  
+    flex-direction: row;            
+    flex-wrap: wrap;    
+}
+
+.page-setup .styles .list .item{       
+    position: relative;
+    padding: 10px;
+    margin:  10px;    
+    width: 180px;
+
+    display: flex;        
+    flex-direction: column;
+    align-items: center;    
+}
+    
+.page-setup .styles .list .item img{   
+    width: 100%;
+}
+
+.page-setup .styles .list .item input{   
+    height: 20px;
+    width: 20px;
+}
+
+.page-setup .styles .list .item .title{
+    position: absolute;
+    left: 5px;
+    top: -10px;
+    background-color: white;
+    padding: 0px 5px;
+    z-index: 2;    
+}    
+
+
+/********************************************************************************
+                                    
+********************************************************************************/
+
+.page-setup  .checkboxes {
+    border: 2px solid black; 
+    padding: 10px 5px 5px 5px;
+    margin-bottom: 10px;
+    position: relative;
+}
+.page-setup  .checkboxes .item {
+    margin: 5px;
+
+}    
+
+.page-setup  .checkboxes .caption {
+    position: absolute;
+    left: 5px;
+    top: -10px;
+    background-color: white;
+    padding: 0px 5px;
+}    
+
+.page-setup .checkbox{    
+    width:  20px;
+    height: 20px;
+}
+.page-setup  .checkbox::before{
+    width:  inherit;
+    height: inherit;   
+}
+
+.page-setup .input{    
+    width: 100px;
+    height: 40px;
+
+    padding: 0px 10px;
+    margin:  0px;
+    font-size: 18px;
+
+    border-style: solid;
+    border-width: 1px;
+    border-color: #ccc;
+    border-radius: 10px;
+
+    overflow: hidden;    
+}
+
+
+.page-setup .select{    
+    width: 100px;
+    height: 40px;
+
+    padding: 0px 10px;
+    margin:  0px;
+
+    border-style: solid;
+    border-width: 1px;
+    border-color: #ccc;
+    border-radius: 10px;
+
+    font-size: 18px;
+
+    overflow: hidden;    
+}
+
+
+.page-setup .input-color{
+    width:  100px;
+    height: 40px;
+    margin: 2px 2px;
+    border-width: 0;
+    border-radius: 10px;
+}
+
+.page-setup .frame {
+    border-width: thin;
+    border-style: solid;
+    position: relative;
+    padding: 10px;
+    margin: 0px 0px 20px 0px;
+}
+
+.page-setup .frame .title{
+    position: absolute;
+    left: 5px;
+    top: -10px;
+    background-color: white;
+    padding: 0px 5px;
+}

@@ -1,0 +1,107 @@
+/********************************************************************************
+* QuData Chat Builder Plugin.
+*
+* Page bots
+*
+* @copyright Copyright (C) 2021, qudata.com
+********************************************************************************/
+
+.console .content .pages .page-bots{
+    width: var(--page-width);
+    min-height: var(--page-height);
+    padding: 20px 10px 5px 10px;
+    display: none;
+    flex-direction: column;
+    align-content: flex-start;
+}    
+
+.console .content .pages .page-bots p{   
+    font-size: inherit !important;    
+    margin: 5px 20px 5px 20px;
+}
+.console .content .pages .page-bots ol{   
+    font-size: inherit !important;    
+    margin:          10px 0px 10px 36px !important;
+    padding:         0;
+}
+.console .content .pages .page-bots ol li{   
+    font-size: inherit !important;    
+    margin-bottom:    10px !important;
+    padding:         0;
+}
+
+.console .content .pages .page-bots ul{   
+    font-size: inherit !important;    
+    margin:          10px 0px 10px 36px;
+    padding:         0;
+}
+
+.console .content .pages .page-bots ul li{   
+    font-size: inherit !important;    
+    list-style-type: disc;
+    margin:          0px 0px 0px 28px;
+}
+
+.console .content .pages .page-bots ol li{   
+    font-size: inherit !important;    
+    margin:          0px 0px 0px 28px;
+}
+
+.console .content .pages .page-bots .bots-list{
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;    
+    flex-wrap: wrap
+}    
+
+.console .content .pages .page-bots .bots-list .bot-card{
+    border-width: thin;
+    border-style: solid;
+    background:   white;    
+    
+    position: relative;
+    padding: 20px;
+    margin:   10px 10px 10px 10px; 
+    padding: 40px 10px 10px 10px; 
+    display: flex;
+    align-items: flex-start;
+    width:  45%;
+}    
+
+.console .content .pages .page-bots .bots-list .bot-card .title{            
+    padding: 5px 5px;
+    position: absolute;
+    left: 5px;
+    top:  0px;        
+    font-size: 28px;
+}    
+
+.console .content .pages .page-bots .bots-list .bot-card .check{
+    padding: 0;
+}
+
+
+.console .content .pages .page-bots .bots-list .bot-card .info{
+    padding: 0;
+}
+
+.console .content .pages .page-bots .bots-list .bot-card input{
+    margin: 10px;
+    width:  20px;
+    height: 20px;  
+}    
+
+.console .content .pages .page-bots .bots-list .bot-card .abstract{
+    color: rgb(60, 145, 60);
+    font-weight: 600px;
+}
+
+.console .content .pages .page-bots .bots-list .bot-card img{
+    margin: 10px 20px 5px 10px;
+    width:  180px;    
+}    
+
+.console .content .pages .page-bots .bots-list .bot-card .info p{   
+    margin: 10px 10px;
+}

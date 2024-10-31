@@ -1,0 +1,1345 @@
+/********************************************************************************
+* QuData Chat Builder Plugin.
+*
+* Container for chat-bot
+*
+* @copyright Copyright (C) 2021, qudata.com
+********************************************************************************/
+
+:root{
+    /****************** size and position bot window and open button ***********/
+    --qubot-text-sender-name:     "Qu";
+    --qubot-text-bot-name:        "QuBot";
+    --qubot-text-info:            "We are always in touch with you";
+
+    --qubot-width:                400px;
+    --qubot-height:               600px;
+    --qubot-left:                 none;
+    --qubot-right:                50px;
+    --qubot-top:                  none;
+    --qubot-bottom:               50px;
+
+    --qubot-shadow-size:          16px;
+    --qubot-shadow-blur:          16px;
+    --qubot-shadow-color:       #646464b2;    
+
+    /*************************** header params ********************************/
+
+    --qubot-header-background:  white;                  
+    --qubot-header-line-width:    1px;
+    --qubot-header-line-color:  #ffffff;
+
+    --qubot-header-color:       #20148f;
+    --qubot-header-font-size:     18px;
+    --qubot-header-font-line:     20px;
+    --qubot-header-info-color:  #20148f;
+    --qubot-header-info-size:     18px;
+    --qubot-header-info-line:     20px;
+
+    --qubot-top-radius:           20px;                  /* radius of top window */    
+
+    --qubot-header-shadow-size:   5px;                   /* both for message and answer */
+    --qubot-header-shadow-blur:   20px;
+    --qubot-header-shadow-color:#646464b2;             /* 0 14px 50px #ddd, 0 10px 10px #ddd;*/
+
+    --qubot-icon-logo1:           none;             /*       url(icons/logo01a.png);        */
+    --qubot-icon-logo2:           none;             /*         url(icons/logo01b.png);        */
+    --qubot-icon-close:           url(svg/close.svg);       /* https://icomoon.io/app/#/select */
+    --qubot-icon-reload:          url(svg/reload.svg); 
+    --qubot-icon-send:            url(svg/send.svg);   
+    --qubot-icon-voice:           url(svg/micro.svg);     
+    --qubot-icon-voice-active:    url(svg/micro-red.svg);  
+    --qubot-icon-attach:          url(svg/attach.svg);       
+                                                            /* https://codepen.io/sosuke/pen/Pjoqqp */
+    --qubot-close-color1:         invert(19%) sepia(82%) saturate(2689%) hue-rotate(197deg) brightness(93%) contrast(101%);
+    --qubot-close-color2:         invert(56%) sepia(62%) saturate(5493%) hue-rotate(176deg) brightness(108%) contrast(101%);    
+    --qubot-send-color1:          invert(19%) sepia(82%) saturate(2689%) hue-rotate(197deg) brightness(93%) contrast(101%);
+    --qubot-send-color2:          invert(56%) sepia(62%) saturate(5493%) hue-rotate(176deg) brightness(108%) contrast(101%);    
+    --qubot-voice-color1:         opacity(75%);
+    --qubot-voice-color2:         opacity(100%); 
+    --qubot-voice-color3:         saturate(5493%);
+
+    /**************************** body params *********************************/
+
+    --qubot-body-background:    white;
+    --qubot-body-line-color:    white;
+    --qubot-body-line-width:      1px;
+    --qubot-body-backround-image: none;
+
+    --qubot-body-time-color:      black;
+    --qubot-body-time-size:       10px;
+
+    --qubot-mes-shadow-size:      0px;                    /* both for message and answer */
+    --qubot-mes-shadow-blur:      0px;
+    --qubot-mes-shadow-color:   #646464b2;             /* 0 14px 50px #ddd, 0 10px 10px #ddd;*/
+    --qubot-mes-padding:          10px;
+    
+    /*************************** footer params ********************************/
+
+    --qubot-footer-background:  white;
+    --qubot-footer-line-color:  white;
+    --qubot-footer-line-width:    1px;
+
+    --qubot-bottom-radius:        20px;                  /* radius of top window */    
+
+    --qubot-footer-shadow-size:   3px;                   /* both for message and answer */
+    --qubot-footer-shadow-blur:   15px;
+    --qubot-footer-shadow-color:#646464b2;             /* 0 14px 50px #ddd, 0 10px 10px #ddd;*/
+    --qubot-footer-height:        30px;
+
+    --qubot-input-radius:         100px;
+    --qubot-input-height:          30px;
+    --qubot-input-margin-x:        5px;
+    --qubot-input-margin-y:        5px;
+    --qubot-input-line-color:   black;
+    --qubot-input-line-width:      1px;
+    
+    --qubot-input-background:    white;
+    --qubot-input-background-disabled:    gray;
+    --qubot-input-font-size:      16px;
+    --qubot-input-font-color:      black;
+
+    /**************************  button open  ********************************/
+
+    --qubot-open-radius:          70px;                  /* radius of button open */
+    --qubot-open-radius-img:      70px;                  /* radius of imgae for button open */
+    --qubot-open-line:             0px;    
+    --qubot-open-color:           black;
+
+    /*************************** answer params ********************************/
+
+    --qubot-answer-background:  #0079fe;
+    --qubot-answer-line-color:  #0079fe;
+    --qubot-answer-line-size:     1px;
+
+    --qubot-answer-color:       #ffffff;
+    --qubot-answer-font-size:     18px;      
+    --qubot-header-font-line:     20px;
+
+    --qubot-icon-human:           url(icons/robot09.png);  /* icon to the right of the human answer */
+    --qubot-icon-human-display:   block;                  /* show (block) or not (none) this icon */
+    --qubot-icon-human-size:      30px;                   /* size of this icon */
+
+    /************************** message params ********************************/
+
+    --qubot-message-background: #f7f7f7;
+    --qubot-message-line-color: #212529;
+    --qubot-message-line-width:   1px;
+    --qubot-message-font-size:   18px;
+    --qubot-message-font-line:   20px;
+    --qubot-message-color:      #212529;      
+
+    --qubot-sender-color:       #07f;
+    --qubot-sender-font-size:     13px;
+    --qubot-sender-font-line:     15px;
+            
+    --qubot-mes-radius:           20px;                  /* radius of message and answer frame */
+
+    --qubot-icon-agent:           url("icons/logo01a.png");  /* icon to the left of the message */
+    --qubot-icon-agent-display:   block;                  /* show (block) or not (none) this icon */
+    --qubot-icon-agent-size:      30px;                   /* size of this icon */        
+
+    /******************************  buttons  ********************************/
+
+    --qubot-button-background1: #ffffff;
+    --qubot-button-background2: #f0f0f0;
+    --qubot-button-background3: #a0a0a0;
+    --qubot-button-color:       #212529;
+    --qubot-button-line-color:  #212529;
+    --qubot-button-line-width:     1px;
+    --qubot-button-radius:        20px;
+    --qubot-button-height:        40px;
+    
+    --qubot-button-font-size:     16px;
+    --qubot-button-font-line:     20px;
+    --qubot-button-margin:         3px;
+
+    /******************************  animations  ********************************/
+    
+    --qubot-top-hide:             auto;      
+    --qubot-bottom-hide:        -100vh;      
+
+    --qubot-anim-icon-show-duration: 1s;
+    --qubot-anim-icon-show-function: ease;
+
+    --qubot-anim-icon-hide-duration: .2s;
+    --qubot-anim-icon-hide-function: ease;
+
+    --qubot-anim-show-duration:   0.8s;
+    --qubot-anim-show-function: cubic-bezier(0.25, 0.46, 0.49, 1.21);
+
+    --qubot-anim-hide-duration:   0.8s;
+    --qubot-anim-hide-function: cubic-bezier(0.25, 0.46, 0.49, 1.21);
+
+    --qubot-anim-message-duration: 1s;
+    --qubot-anim-message-button-duration: 1s;
+}
+
+.qubot {    
+    width:              var(--qubot-width) ;
+    height:             var(--qubot-height);
+
+    font-size:          18px;
+    line-height:        20px;
+    font-family:        '-apple-system', 'BlinkMacSystemFont',   "San Francisco", "Segoe UI", Arial, sans-serif;
+  
+    padding:            0px;
+    overflow:           hidden;
+
+    border-top-left-radius:     var(--qubot-top-radius);
+    border-top-right-radius:    var(--qubot-top-radius);
+    border-bottom-left-radius:  var(--qubot-bottom-radius);
+    border-bottom-right-radius: var(--qubot-bottom-radius);
+    
+    box-shadow: var(--qubot-shadow-size) var(--qubot-shadow-size) var(--qubot-shadow-blur) 0 var(--qubot-shadow-color);
+
+    display:            flex;      /* none or flex*/
+    flex-direction:     column;
+    text-align:         initial;
+    justify-content:    space-between;
+    z-index:            99999999;
+             
+    position:           fixed;
+
+    left:                var(--qubot-left);
+    right:               var(--qubot-right);
+    top:                 var(--qubot-top-hide);
+    bottom:              var(--qubot-bottom-hide);
+}
+
+.qubot.qubot-show {                                                           
+    left:                var(--qubot-left);
+    right:               var(--qubot-right);
+    top:                 var(--qubot-top);
+    bottom:              var(--qubot-bottom);
+    transition-duration: var(--qubot-anim-show-duration);
+    transition-property: left, right, top, bottom;
+    transition-timing-function: var(--qubot-anim-show-function);
+}
+
+.qubot.qubot-hide {
+    left:               var(--qubot-left);
+    right:              var(--qubot-right);
+    top:                var(--qubot-top-hide);
+    bottom: -150vh;
+    transition-duration:var(--qubot-anim-hide-duration);
+    transition-property:left, right, top, bottom;
+    transition-timing-function: var(--qubot-anim-hide-function);
+}
+
+/********************************************************************************
+                           Button for started chat-bot
+********************************************************************************/
+.qubot-open {
+    background:         var(--qubot-icon-logo1) no-repeat !important;
+    background-size:    var(--qubot-open-radius-img) !important;
+    background-position:center !important;
+    background-color:   none   !important;
+
+    width:              var(--qubot-open-radius);
+    height:             var(--qubot-open-radius);
+    border-radius:      var(--qubot-open-radius);
+
+    border-width:       var(--qubot-open-line);
+    border-color:       var(--qubot-open-color);
+    border-style:       solid;
+
+    position:           fixed;
+    left:               var(--qubot-left);
+    right:              var(--qubot-right);
+    top:                var(--qubot-top);
+    bottom:             var(--qubot-bottom);
+
+    cursor:             pointer;
+
+    z-index:            9999999;
+
+    transition-property: background !important;
+
+    display:            flex;
+    justify-content:    center;
+    align-items:        center;
+    box-shadow:         none;
+}
+.qubot-open.qubot-open-shadow {
+    box-shadow: var(--qubot-shadow-size) var(--qubot-shadow-size) var(--qubot-shadow-blur) 0 var(--qubot-shadow-color);
+    animation: qubotOpenButton 0.6s; 
+}
+.qubot-open.qubot-show {                           
+    transition-duration:var(--qubot-anim-icon-show-duration);
+    transition-timing-function: var(--qubot-anim-icon-show-function);
+    visibility:            visible;
+}
+.qubot-open.qubot-hide {                     
+    transition-duration: var(--qubot-anim-icon-hide-duration);
+    transition-timing-function: var(--qubot-anim-icon-hide-function);
+    visibility:            hidden;
+}
+
+.qubot-open:hover {
+    background: var(--qubot-icon-logo2) no-repeat !important;
+    background-size: var(--qubot-open-radius-img) !important;    
+    background-position:center !important;
+}
+.qubot-open:active {
+    transform:          scale(0.9);
+}    
+/********************************************************************************
+                                 Header of chatbot window
+*********************************************************************************/
+
+.qubot .qubot-header {        
+    border-style:       solid;
+    border-width:       var(--qubot-header-line-width);
+    border-color:       var(--qubot-header-line-color);
+    background-color:   var(--qubot-header-background);
+
+    border-top-left-radius:     var(--qubot-top-radius);
+    border-top-right-radius:    var(--qubot-top-radius);
+    border-bottom-left-radius:  0;
+    border-bottom-right-radius: 0;
+
+    box-shadow: 0px var(--qubot-header-shadow-size) var(--qubot-header-shadow-blur) var( --qubot-header-shadow-color);
+
+    padding:            10px; 
+             
+    display:            flex;                            /* none or flex*/
+    flex-direction:     column;
+    z-index:            5;
+}    
+
+.qubot .qubot-header .qubot-content{
+    display:            flex;  
+    flex-direction:     row;
+    justify-content:    space-between;
+    align-items:        center;    
+}
+
+.qubot .qubot-header .qubot-content .qubot-logo{
+    width:              var(--qubot-icon-agent-size);
+    height:             var(--qubot-icon-agent-size);
+ 
+    background:         var(--qubot-icon-logo1) no-repeat;
+    background-size:    var(--qubot-icon-agent-size);   
+
+    background-position: center;
+    margin-right:       5px;    
+}
+
+.qubot .qubot-header .qubot-content .qubot-name{
+    flex: 1;
+}
+
+.qubot .qubot-header .qubot-content .qubot-name::after{
+    color:              var(--qubot-header-color);
+    font-size:          var(--qubot-header-font-size);
+    line-height:        var(--qubot-header-font-line);
+    font-weight:        700;    
+    content:            var(--qubot-text-bot-name);
+}
+
+.qubot .qubot-header .qubot-content .qubot-menu{
+    margin:            5px;
+    border:            1px solid black;
+}
+
+
+.qubot .qubot-header .qubot-content .qubot-reload{
+    cursor:            pointer;
+    background:        var(--qubot-icon-reload) no-repeat;
+    background-size:   30px;
+    margin-right:      20px;
+    width:             30px;
+    height:            30px;    
+    filter:            var(--qubot-close-color1);   /* https://codepen.io/sosuke/pen/Pjoqqp */
+}
+.qubot .qubot-header .qubot-content .qubot-reload:hover{
+    filter:            var(--qubot-close-color2);   
+}
+.qubot .qubot-header .qubot-content .qubot-reload:active{
+    transform:         scale(0.9);
+}    
+ 
+.qubot .qubot-header .qubot-content .qubot-close{
+    cursor:            pointer;
+    background:        var(--qubot-icon-close) no-repeat;
+    background-size:   30px;
+    width:             30px;
+    height:            30px;    
+    filter:            var(--qubot-close-color1);   /* https://codepen.io/sosuke/pen/Pjoqqp */
+}
+.qubot .qubot-header .qubot-content .qubot-close:hover{
+    filter:            var(--qubot-close-color2);   
+}
+.qubot .qubot-header .qubot-content .qubot-close:active{
+    transform:         scale(0.9);
+}    
+
+.qubot .qubot-header .qubot-info{
+    flex: 1;    
+}
+.qubot .qubot-header .qubot-info::after {    
+    display:            flex;       
+    flex-direction:     row;
+    justify-content:    center;
+
+    color:              var(--qubot-header-info-color);
+    font-size:          var(--qubot-header-info-size) !important;
+    line-height:        var(--qubot-header-info-line);    
+    content:            var(--qubot-text-info);    
+}
+
+/********************************************************************************
+                                 Footer of chatbot window
+*********************************************************************************/
+
+.qubot .qubot-footer {     
+    border-style:       solid;
+    border-width:       var(--qubot-footer-line-width);
+    border-color:       var(--qubot-footer-line-color);
+    background:         var(--qubot-footer-background);
+
+    border-bottom-left-radius:  var(--qubot-bottom-radius);
+    border-bottom-right-radius: var(--qubot-bottom-radius);
+        
+    box-shadow: 0px calc(0px - var(--qubot-footer-shadow-size)) var(--qubot-footer-shadow-blur) var(--qubot-footer-shadow-color);
+
+    display:            flex;      
+    flex-direction:     column;    
+    z-index:            5;
+}    
+
+.qubot .qubot-footer .qubot-content{
+    padding:            5px 5px;
+    display:            flex;
+    flex-direction:     row;
+    justify-content:    space-between;
+    align-items:        center;
+}
+
+.qubot .qubot-footer .qubot-info{ 
+    color:              var(--qubot-header-color);   
+    font-size:          10px !important;
+    line-height:        10px;
+    padding-right:      var(--qubot-bottom-radius);
+
+    display:            flex;       
+    flex-direction:     row;
+    justify-content:    flex-end;
+}
+
+.qubot .qubot-footer .qubot-info a {
+    color:              var(--qubot-header-color);   
+    margin-bottom:      2px;   
+    text-decoration:    none;
+    cursor:             pointer;
+}
+
+.qubot .qubot-footer .qubot-info a:hover { 
+    text-decoration:    underline; 
+}
+  
+.qubot .qubot-footer .qubot-content .upload{
+    margin:             5px;       
+}
+
+.qubot .qubot-footer .qubot-content .menu{
+    margin:             5px;
+}
+
+.qubot .qubot-footer .qubot-content .qubot-container{
+    border:             none;
+    height:             var(--qubot-footer-height);
+    margin:             var(--qubot-input-margin-y) var(--qubot-input-margin-x);
+    padding:            0;
+    flex:               1;
+    display:            flex;
+    flex-direction:     row;
+    align-items:        center;
+}
+
+.qubot-download-icon {
+    margin:             5px;
+    width:              24px;
+    height:             22px;
+    display:            inline-block;
+    background-image:   url("svg/download.svg");
+}
+
+.qubot .qubot-footer .qubot-content .qubot-container .qubot-input-geo {
+    border-style:       solid !important;
+    border-radius:      var(--qubot-input-radius) !important;
+    border-width:       var(--qubot-input-line-width) !important;
+    border-color:       var(--qubot-input-line-color) !important;
+    height:             var(--qubot-input-height) !important;
+    width:              100% !important;
+    /* overflow:           hidden !important; */
+    /* margin-left:        10px !important; */
+    display:            flex;
+    align-items:        center;
+    justify-content:    center;
+    padding:            4px 12px !important;
+    background-color:   var(--qubot-input-background);
+    color:              var(--qubot-input-font-color) !important;
+    font-size:          var(--qubot-input-font-size) !important;
+    transition-duration: .2s;
+    margin-bottom: 0;
+}
+
+.qubot .qubot-footer .qubot-content .qubot-container .qubot-input-attach-btn{
+    background-image:   url("svg/attach.svg");
+    background-repeat:  no-repeat;
+    background-size:    cover;
+    width:              30px;
+    height:             30px;
+    transform:          rotate(45deg);
+    /* margin-left:        10px; */
+    margin-top: -2px;
+}  
+.qubot .qubot-footer .qubot-content .qubot-container .qubot-input-drop-area {
+    border-style: dashed;
+    border-radius:      var(--qubot-input-radius) !important;
+    border-width:       var(--qubot-input-line-width) !important;
+    border-color: var(--qubot-input-line-color);
+    height:             var(--qubot-input-height) !important;
+    width:              100% !important;
+    overflow:           hidden !important;
+    margin-left:        10px !important;
+    display:            flex;
+    align-items:        center;
+    justify-content:    center;
+    background-color: #eee;
+    color:              var(--qubot-input-font-color) !important;
+    font-size:          var(--qubot-input-font-size) !important;
+    text-align:         center;
+    transition-duration: .2s;
+}
+.qubot .qubot-footer .qubot-content .qubot-container .qubot-input{
+    border-style:       solid !important;
+    border-radius:      var(--qubot-input-radius) !important;
+    border-width:       var(--qubot-input-line-width) !important;
+    border-color: var(--qubot-input-line-color);
+    height:             var(--qubot-input-height) !important;
+    width:              100% !important;
+    overflow:           hidden !important;
+    padding:            4px 12px !important;
+    /* margin-left:        10px !important; */
+    background-color: var(--qubot-input-background);
+    color:              var(--qubot-input-font-color) !important;
+    font-size:          var(--qubot-input-font-size) !important;
+    transition-duration: .2s;
+}
+.qubot .qubot-footer .qubot-content .qubot-container .qubot-input:focus{  
+    outline: none;
+    border-color:       var(--qubot-input-line-color) !important;
+    border-width:       var(--qubot-input-line-width) !important;
+}
+.qubot .qubot-footer .qubot-content .qubot-container .qubot-input:disabled {
+    background: var(--qubot-input-background-disabled) !important;
+}
+
+.qubot .qubot-footer .qubot-content .qubot-container .attach{            
+    border:             none !important;
+    cursor:             pointer !important;
+    background:         var(--qubot-icon-attach) no-repeat !important;
+    background-color:   none !important;
+    background-size:    30px !important;
+    width:              35px !important;
+    height:             30px !important;    
+    filter:             var(--qubot-send-color1) !important; 
+}
+.qubot .qubot-footer .qubot-content .qubot-container .qubot-attach:hover{
+    filter:             var(--qubot-send-color2) !important;   
+}
+.qubot .qubot-footer .qubot-content .qubot-container .qubot-attach:active{
+    transform:          scale(0.9) !important;
+}
+.qubot .qubot-footer .qubot-content .qubot-container .qubot-cancel-geo{
+    border:             none !important;
+    cursor:             pointer !important;
+    background-color:   transparent !important;
+    background-size:    30px !important;
+    width:              40px !important;
+    height:             35px !important;
+    font-size:          18px;
+    padding: 0;
+}
+.qubot .qubot-footer .qubot-content .qubot-container .qubot-send{            
+    border:             none !important;
+    cursor:             pointer !important;
+    background:         var(--qubot-icon-send) no-repeat !important;
+    background-color:   none !important;
+    background-size:    30px !important;
+    width:              35px !important;
+    height:             30px !important;    
+    filter:             var(--qubot-send-color1) !important; 
+}
+.qubot .qubot-footer .qubot-content .qubot-container .qubot-send:hover{
+    filter:             var(--qubot-send-color2) !important;   
+}
+.qubot .qubot-footer .qubot-content .qubot-container .qubot-send:active{
+    transform:          scale(0.9) !important;
+}
+
+.qubot .qubot-footer .qubot-content .qubot-container .qubot-voice-recorder{            
+    border:             none !important;
+    cursor:             pointer !important;
+    background:         var(--qubot-icon-voice) no-repeat ;
+    background-color:   none ;
+    background-size:    30px !important;
+    width:              35px !important;
+    height:             30px !important;    
+    filter:             var(--qubot-voice-color1) !important;
+}
+.qubot .qubot-footer .qubot-content .qubot-container .qubot-voice-recorder:hover{
+    filter:             var(--qubot-voice-color2) !important;   
+}
+.qubot .qubot-footer .qubot-content .qubot-container .qubot-voice-recorder:active{
+    transform:          scale(0.9) !important;
+}
+.qubot .qubot-footer .qubot-content .qubot-container .qubot-voice-recorder-active{
+    background:         var(--qubot-icon-voice-active) no-repeat ;
+}
+
+
+/********************************************************************************
+                                 Container for chatbot window
+*********************************************************************************/
+
+.qubot .qubot-body {
+    position:           relative; 
+    background:         var(--qubot-body-backround-image); 
+    background-size:    cover;
+    background-color:   var(--qubot-body-background);
+    border-left-style:  solid;
+    border-right-style: solid;
+    border-color:       var(--qubot-body-line-color);         
+    border-left-width:  var(--qubot-body-line-width);
+    border-right-width: var(--qubot-body-line-width);
+
+    flex:               1;
+    
+    overflow-x:         hidden;
+    overflow-y:         auto;
+
+    display:            flex;           
+    flex-direction:     column;
+    justify-content:    flex-end;
+}    
+/********************************************************************************
+                                 Chatbot window
+*********************************************************************************/
+
+.qubot .qubot-msg-invalid{
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    bottom: 0;
+}
+
+.qubot .qubot-body .qubot-chat {
+    position:           relative !important;
+    scroll-behavior: smooth;
+    overflow-x:         hidden !important;
+    overflow-y:         auto !important;
+    scrollbar-width:    thin !important;
+}    
+
+.qubot .qubot-body .qubot-chat::-webkit-scrollbar             {  width:  5px !important;  height: 5px !important; }
+.qubot .qubot-body .qubot-chat::-webkit-scrollbar-track       {  background: #f1f1f1 !important;     }
+.qubot .qubot-body .qubot-chat::-webkit-scrollbar-thumb       {  background: #aaa !important;        }
+.qubot .qubot-body .qubot-chat::-webkit-scrollbar-thumb:hover {  background: #555 !important;        }
+
+/********************************************************************************
+                                 Answer
+*********************************************************************************/
+
+.qubot .qubot-body .qubot-chat .qubot-answer{    
+    margin:             3px;    
+    
+    display:            flex;
+    flex-direction:     row-reverse;
+    justify-content:    flex-start;
+    transition:         0.5s ease;
+}    
+
+.msg-appear{
+    opacity: 0;
+}
+.msg-translate{
+    transform: translateY(500px);
+}
+
+.qubot .qubot-body .qubot-chat .qubot-answer .qubot-container{    
+    display:            flex;
+    flex-direction:     column;
+    max-width: 80%;
+}    
+
+.qubot .qubot-body .qubot-chat .qubot-answer  .qubot-logo{
+    display:            var(--qubot-icon-human-display);
+    background:         var(--qubot-icon-human) no-repeat;
+    width:              var(--qubot-icon-human-size);
+    height:             var(--qubot-icon-human-size);
+    background-size:    var(--qubot-icon-human-size);
+    box-shadow: var(--qubot-mes-shadow-size) var(--qubot-mes-shadow-size) var(--qubot-mes-shadow-blur) 0 var(--qubot-mes-shadow-color);   
+    background-position:center;
+    margin-left:        5px;
+}    
+
+.qubot .qubot-body .qubot-chat .qubot-answer  .qubot-container .qubot-sender{
+    display:            flex;
+    flex-direction:     row;
+    justify-content:    flex-end;
+}    
+
+.qubot .qubot-body .qubot-chat .qubot-answer  .qubot-container .qubot-content{    
+    padding:            var(--qubot-mes-padding);
+
+    background-color:   var(--qubot-answer-background);    
+    color:              var(--qubot-answer-color);    
+    font-size:          var(--qubot-answer-font-size) !important;
+    line-height:        var(--qubot-answer-font-line) !important;    
+
+    border-style:       solid;
+    border-width:       var(--qubot-answer-line-size);
+    border-color:       var(--qubot-answer-line-color);
+    border-radius:      var(--qubot-mes-radius) 0 var(--qubot-mes-radius) var(--qubot-mes-radius);
+
+    box-shadow: var(--qubot-mes-shadow-size) var(--qubot-mes-shadow-size) var(--qubot-mes-shadow-blur) 0 var(--qubot-mes-shadow-color);   
+    word-wrap:          break-word;
+}    
+
+.qubot .qubot-body .qubot-chat .qubot-answer .qubot-container .qubot-time{
+    font-size:          var(--qubot-body-time-size) !important;
+    color:              var(--qubot-body-time-color);
+    line-height:        10px;
+    padding-top:         5px;
+    margin-right:       var(--qubot-mes-padding);
+
+    display:            flex;       
+    flex-direction:     row;     
+    justify-content:    flex-end;    
+}    
+
+/********************************************************************************
+                                Message
+*********************************************************************************/
+
+.qubot .qubot-body .qubot-chat .qubot-message{
+    margin:             3px 50px 3px 3px !important;
+    padding:            5px !important;
+    width:              90% !important;
+    
+    display:            flex !important;
+    flex-direction:     row !important;
+    transition:         0.5s ease;
+}
+
+.qubot .qubot-body .qubot-chat .qubot-message  .qubot-logo{
+    display:            var(--qubot-icon-agent-display) !important;
+    background:         var(--qubot-icon-agent) no-repeat !important;
+    background-color:   none !important;
+    width:              var(--qubot-icon-agent-size) !important;
+    height:             var(--qubot-icon-agent-size) !important;
+    background-size: calc(var(--qubot-icon-agent-size) - 2px) !important;
+    background-position:
+    center !important;
+    box-shadow: var(--qubot-mes-shadow-size) var(--qubot-mes-shadow-size) var(--qubot-mes-shadow-blur) 0 var(--qubot-mes-shadow-color) !important;
+    margin-right:       5px !important;
+    min-width:          var(--qubot-icon-agent-size) !important;
+}    
+
+.qubot .qubot-body .qubot-chat .qubot-message .qubot-container{
+    margin:             0 !important;
+    width:              100% !important;    
+}    
+
+.qubot .qubot-body .qubot-chat .qubot-message  .qubot-container .qubot-sender{
+    margin:             0 !important;
+    background-color:   none !important;        
+}    
+.qubot .qubot-body .qubot-chat .qubot-message  .qubot-container .qubot-sender::after{
+    color:              var(--qubot-sender-color) !important;
+    font-size:          var(--qubot-sender-font-size) !important;
+    line-height:        var(--qubot-sender-font-line) !important;
+    font-weight:        700 !important;
+    content:            var(--qubot-text-sender-name) !important;
+}
+
+.qubot .qubot-body .qubot-chat .qubot-message  .qubot-container .qubot-content{
+    padding:            var(--qubot-mes-padding) !important;
+    color:              var(--qubot-message-color);
+    font-size:          var(--qubot-message-font-size) !important;
+    line-height:        var(--qubot-message-font-line) !important;
+    background:         var(--qubot-message-background);
+    box-shadow:         var(--qubot-mes-shadow-size) var(--qubot-mes-shadow-size) var(--qubot-mes-shadow-blur) 0 var(--qubot-mes-shadow-color) !important;
+    border-style: solid;
+    border-width:       var(--qubot-message-line-width) !important;
+    border-color: var(--qubot-message-line-color);
+    border-radius:      0 var(--qubot-mes-radius) var(--qubot-mes-radius) var(--qubot-mes-radius) !important;
+}    
+.qubot .qubot-body .qubot-chat .qubot-message  .qubot-container .qubot-content b,
+.qubot .qubot-body .qubot-chat .qubot-message  .qubot-container .qubot-content strong {
+    color:       var(--qubot-message-color);
+    font-weight: bold;
+}
+.qubot .qubot-body .qubot-chat .qubot-message .qubot-container .qubot-time{        
+    font-size:          var(--qubot-body-time-size) !important;
+    color:              var(--qubot-body-time-color) !important;
+    line-height:        10px !important;    
+    padding-left:       var(--qubot-mes-padding) !important;
+    padding-top:        5px !important;
+    display:            flex !important;    
+    flex-direction:     row !important;
+}    
+
+.qubot .qubot-body .qubot-chat .qubot-message  .qubot-typing{
+    background:         url(svg/typing2.svg) no-repeat !important;
+    background-size:    30px !important;
+    width:              30px !important;
+    height:             30px !important;  
+}    
+
+
+/********************************************************************************
+                           Content of chatbot window
+*********************************************************************************/
+
+.qubot .qubot-body .qubot-chat .qubot-message .qubot-container .qubot-content p
+{
+    padding:            0 !important;
+    margin:             0px 0px 0px 0px !important;
+    font-size:          var(--qubot-message-font-size) !important;
+    line-height:        var(--qubot-message-font-line)  !important;
+    word-wrap:          break-word !important;
+}
+.qubot .qubot-body .qubot-chat .qubot-message .qubot-container .qubot-content pre
+{
+    padding:            0 !important;
+    margin:             0px 0px 10px 0px !important;
+    font-size:          0.8em !important;
+    line-height:        1em   !important;
+}
+
+.qubot .qubot-body .qubot-chat .qubot-message .qubot-container .qubot-content p .qubot-green{
+    color:              #096 !important;
+}
+.qubot .qubot-body .qubot-chat .qubot-message .qubot-container .qubot-content p .qubot-red{
+    color:              #906 !important;
+}
+.qubot .qubot-body .qubot-chat .qubot-message .qubot-container .qubot-content p .qubot-blue{
+    color:              #069 !important;
+}
+
+.qubot .qubot-body .qubot-chat .qubot-message .qubot-container .qubot-content .qubot-btn-container  {
+    overflow: hidden;
+    opacity: 1;
+    transition:  0.5s ease;
+}
+
+.qubot .qubot-body .qubot-chat .qubot-message .qubot-container .qubot-content .qubot-row  {
+    display:            flex;    
+    flex-direction:     row;
+    flex-wrap:          wrap;
+}
+
+.qubot .qubot-body .qubot-chat .qubot-message .qubot-container .qubot-content .qubot-row .qubot-button {
+    cursor:             pointer !important;
+    flex:               1 !important;
+    min-height:         var(--qubot-button-height) !important;
+    height: var(--qubot-button-height);
+    border-color: var(--qubot-button-line-color);
+    border-width: var(--qubot-button-line-width);
+    border-style: solid;
+    border-radius:      var(--qubot-button-radius) !important;
+    background:         var(--qubot-button-background1) !important;
+    color:              var(--qubot-button-color) !important;
+    font-size:          var(--qubot-button-font-size) !important;
+    line-height:        var(--qubot-button-font-size) !important;
+    font-weight:        normal !important;
+    text-decoration:    none !important;
+    margin:             calc(3px + var(--qubot-button-margin)) var(--qubot-button-margin) 3px 3px !important;
+    padding: 4px 15px 4px 15px !important;
+    display:            flex !important;
+    flex-direction:     row !important;
+    text-align:         center !important;
+    justify-content:    center;
+    align-items:        center !important;
+    transition-duration: var(--qubot-anim-message-button-duration) !important;
+    white-space:         normal !important;
+    /* position: relative; */
+}
+.qubot .qubot-body .qubot-chat .qubot-message .qubot-container .qubot-content .qubot-row .qubot-button:hover  {
+    background:         var(--qubot-button-background2) !important;
+}
+.qubot .qubot-body .qubot-chat .qubot-message .qubot-container .qubot-content .qubot-row .qubot-button:active {
+    background:         var(--qubot-button-background3) !important;
+}
+.qubot .qubot-body .qubot-chat .qubot-message .qubot-container .qubot-content .qubot-row .qubot-button img .qubot-emoji{
+    margin: 0px 1em 0em 0em !important;
+}
+
+.qubot .qubot-body .qubot-chat .qubot-message .qubot-container .qubot-content .qubot-row  {
+    display:            flex;    
+    flex-direction:     row;
+}
+
+.qubot .qubot-body .qubot-chat .qubot-message .qubot-container .qubot-content .qubot-images  {
+    margin-bottom:      5px;
+    display:            flex;
+    flex-direction:     row;
+    justify-content:    center;      /* flex-start;*/
+    /* flex-wrap:          wrap; */
+}
+
+.qubot .qubot-body .qubot-chat .qubot-message .qubot-container .qubot-content .qubot-images .qubot-image  {    
+    position:           relative;    
+    display:            flex !important;    
+    flex-direction:     column !important;    
+    justify-content:    center;          
+}
+
+.qubot .qubot-body .qubot-chat .qubot-message .qubot-container .qubot-content .qubot-image img {
+    width: 100%;
+    max-width: 100%;
+    min-height: 75px;
+    border-radius: .25rem;
+}
+.not-loaded {
+    background-image: var(--qubot-icon);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 25%;
+    border-style: solid;
+    border-width: 1px;
+    border-color: lightgray;
+    border-radius: .45rem;
+}
+
+.qubot .qubot-body .qubot-chat .qubot-message .qubot-container .qubot-content .qubot-images .qubot-image .qubot-caption  {
+    display:            flex;
+    flex-direction:     row;
+    justify-content:    center;
+}
+
+.qubot .qubot-body .qubot-chat .qubot-message .qubot-container .qubot-content .qubot-map{
+    width:              100% !important;
+    margin:             8px 0px !important;
+}
+
+.qubot .qubot-body .qubot-chat .qubot-message  .qubot-container .qubot-content .qubot-video{
+    width:              100% !important;
+    margin:             8px 0px !important;
+    border-radius: .45rem;
+}
+
+.qubot-svg-shadow {
+    -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
+    filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
+    /* Similar syntax to box-shadow */
+}
+
+/********************************************************************************
+                           Debug window
+*********************************************************************************/
+
+.qubot-debug{
+    width:              800px;
+    height:             400px;
+
+    font-size:          18px;
+    line-height:        22px;
+    font-family:        '-apple-system', 'BlinkMacSystemFont',   "San Francisco", "Segoe UI", Arial, sans-serif;
+  
+    border:             1px solid rgb(128, 128, 128);
+    background-color:   white;
+    z-index:            100000;
+    position:           absolute;    
+    left :              20px;
+    top:                100px;    
+    resize:             both;    
+    overflow:           auto;
+    display:            flex;
+    flex-direction:     column;
+}
+
+.qubot-debug .qubot-header{    
+    height:             25px;    
+    padding:            5px 0px 5px 5px;
+    background-color:   rgb(240, 240, 240);
+    font-weight:        600;
+    cursor:              grab;
+}
+
+.qubot-debug .qubot-header .qubot-close-button {
+    color:            black;
+    float:              right;
+    font-size:          28px;
+    font-weight:        bold;
+    margin-right:       7px;
+}
+.qubot-debug .qubot-header .qubot-close-button:hover,
+.qubot-debug .qubot-header .qubot-close-button:focus {
+    color:           rgb(255, 0, 0);
+    text-decoration:   none;
+    cursor:            pointer;
+}
+
+.qubot-debug .qubot-content{
+    font-size:         16px;
+    overflow:          hidden;
+    padding:           0;
+    flex:               1;
+    display:           flex;
+    flex-direction:     row;
+}
+
+.qubot-debug .qubot-content .qubot-slots{
+    border-right:      1px solid rgb(190, 190, 190);
+    padding:           5px 0px 10px 10px;
+
+    min-width:         100px;    
+    resize:            horizontal;
+    overflow:          auto;        
+}
+.qubot-debug .qubot-content .qubot-c-debug{
+    padding:           0px 0px 10px 10px;    
+    min-width:         300px;
+    flex:              1;
+    overflow:        auto;        
+}
+
+.qubot-debug .qubot-content .qubot-c-debug pre{
+    margin:           5px 0 0 0;    
+} 
+
+.qubot-debug .qubot-content .qubot-slots table tr td{
+    width:             none;
+    border:            none;
+    min-height:        20px;
+    min-width:         100px !important;    
+    padding:           0;
+    text-align:        left;
+}
+
+.qubot-debug .qubot-content  .qubot-red  {    color:  red;}
+.qubot-debug .qubot-content  .qubot-green{    color:  green; }
+.qubot-debug .qubot-content  .qubot-blue {    color:  blue;  }
+.qubot-debug .qubot-content  .qubot-blue2{    color:  #069;}
+.qubot-debug .qubot-content  .qubot-small{    font-size: 12px; }
+
+.qubot-map-pin {
+    background: url("./svg/map-pin.svg");
+    background-repeat: no-repeat;
+    width: 30px;
+    height: 20px;
+}
+
+.qubot-ori-help {
+    top: 0;
+    left: 0;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    background-color: #000000d2;
+    background-image: url("./icons/orientation-help.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 50%;
+    z-index:            99999999;
+}
+@media (max-width: 768px) or (orientation: portrait) {
+    .qubot {
+        right: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: none;
+        border-top-left-radius:     0;
+        border-top-right-radius:    0;
+        border-bottom-left-radius:  0;
+        border-bottom-right-radius: 0;
+    }
+
+    .qubot.qubot-show {
+        right: 0;
+        bottom: 0;
+    }
+    .qubot.qubot-hide {
+        right: 0;
+    }
+    .qubot .qubot-footer {
+        right: 0;
+        border-bottom-left-radius:  0;
+        border-bottom-right-radius: 0;
+    }
+    .qubot .qubot-header {
+        right: 0;
+        border-top-left-radius:     0;
+        border-top-right-radius:    0;
+    }
+}
+
+.qubot-input-range {   
+    border-style: solid;    
+    border-radius: .25rem;    
+    padding: 4px 2px 4px 8px;    
+    border-width: 1px;    
+    border-color: lightgray;   
+    width: 100%;    
+    margin: 0 2px 0 6px; 
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/**
+ * https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/
+ * переопределение стилей WP
+*/
+@supports (-webkit-appearance: none) or (-moz-appearance: none) {
+
+	input[type=range]::-webkit-slider-thumb {
+		height: 24px !important;
+		width: 24px !important;
+	}
+
+	input[type=range]::-moz-range-thumb {
+		height: 24px !important;
+		width: 24px !important;
+	}
+    input[type=range] {
+		outline-offset: 6px !important;
+	}
+}
+
+.qubot-scroll-down {
+    visibility: hidden;
+    opacity: 0;
+    background-color: white;
+    position: absolute;
+    width: 38px;
+    height: 38px;
+    right: 20px;
+    bottom: 30px;
+    box-shadow: 3px 3px 0.5rem 0 rgb(41 48 66 / 50%);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.15s all;
+}
+
+.qubot-scroll-down-icon {
+    background-image:   url("svg/arrow-down.svg");
+    background-repeat: no-repeat;
+    background-size: 42px;
+    background-position-x: -2px;
+    background-position-y: -2px;
+    width: 100%;
+    height: 100%;
+    transition: 0.15s all;
+}
+.qubot-scroll-down-icon:hover {
+    opacity: 0.75;
+}
+
+.qubot-preloader {
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    z-index: 1;
+    animation: load5 1.1s infinite ease;
+}
+
+.qubot .qubot-body .qubot-chat .qubot-message .qubot-logo.qudata-agent-livechat {
+    background-size: 110% !important;
+    border-radius: 100%;
+    border-color: rgb(221, 226, 230);
+    border-style: solid;
+    border-width: 2px;
+}
+.qubot .qubot-body .qubot-chat .qubot-message .qubot-container .qubot-sender.qudata-agent-livechat + .qubot-content {
+    border-color: orange !important;
+    border-width: 2px !important;
+}
+/*.qubot .qubot-body .qubot-chat .qubot-message .qubot-container .qubot-sender.qudata-agent-livechat {
+
+}*/
+
+.qubot-msg-invalid .qubot-error-message {
+    border: solid 2px red;
+    background-color: #f49587;
+    width: 80%;
+    padding: 4px 12px;
+    border-radius: .75rem;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: white;
+}
+
+.qubot-msg-invalid.qubot-show {
+    animation: invalid-anim 2.5s ease;
+}
+
+@keyframes qubotOpenButton {
+    0% {
+        transform: scale(0.8);
+    }
+    66% {
+        transform: scale(1.1);
+    }
+    100%{
+        transform: scale(1);
+    }
+}
+
+@keyframes load5 {
+0%,
+100% {
+    box-shadow: 0em -1.4em 0em 0em #ccc, 0.9em -0.9em 0 0em rgba(204, 204, 204, 0.2), 1.3em 0em 0 0em rgba(204, 204, 204, 0.2), 0.9em 0.9em 0 0em rgba(204, 204, 204, 0.2), 0em 1.3em 0 0em rgba(204, 204, 204, 0.2), -0.9em 0.9em 0 0em rgba(204, 204, 204, 0.2), -1.4em 0em 0 0em rgba(204, 204, 204, 0.5), -0.9em -0.9em 0 0em rgba(204, 204, 204, 0.7);
+}
+12.5% {
+    box-shadow: 0em -1.4em 0em 0em rgba(204, 204, 204, 0.7), 0.9em -0.9em 0 0em #ffffff, 1.3em 0em 0 0em rgba(204, 204, 204, 0.2), 0.9em 0.9em 0 0em rgba(204, 204, 204, 0.2), 0em 1.3em 0 0em rgba(204, 204, 204, 0.2), -0.9em 0.9em 0 0em rgba(204, 204, 204, 0.2), -1.4em 0em 0 0em rgba(204, 204, 204, 0.2), -0.9em -0.9em 0 0em rgba(204, 204, 204, 0.5);
+}
+25% {
+    box-shadow: 0em -1.4em 0em 0em rgba(204, 204, 204, 0.5), 0.9em -0.9em 0 0em rgba(204, 204, 204, 0.7), 1.3em 0em 0 0em #ffffff, 0.9em 0.9em 0 0em rgba(204, 204, 204, 0.2), 0em 1.3em 0 0em rgba(204, 204, 204, 0.2), -0.9em 0.9em 0 0em rgba(204, 204, 204, 0.2), -1.4em 0em 0 0em rgba(204, 204, 204, 0.2), -0.9em -0.9em 0 0em rgba(204, 204, 204, 0.2);
+}
+37.5% {
+    box-shadow: 0em -1.4em 0em 0em rgba(204, 204, 204, 0.2), 0.9em -0.9em 0 0em rgba(204, 204, 204, 0.5), 1.3em 0em 0 0em rgba(204, 204, 204, 0.7), 0.9em 0.9em 0 0em #ffffff, 0em 1.3em 0 0em rgba(204, 204, 204, 0.2), -0.9em 0.9em 0 0em rgba(204, 204, 204, 0.2), -1.4em 0em 0 0em rgba(204, 204, 204, 0.2), -0.9em -0.9em 0 0em rgba(204, 204, 204, 0.2);
+}
+50% {
+    box-shadow: 0em -1.4em 0em 0em rgba(204, 204, 204, 0.2), 0.9em -0.9em 0 0em rgba(204, 204, 204, 0.2), 1.3em 0em 0 0em rgba(204, 204, 204, 0.5), 0.9em 0.9em 0 0em rgba(204, 204, 204, 0.7), 0em 1.3em 0 0em #ffffff, -0.9em 0.9em 0 0em rgba(204, 204, 204, 0.2), -1.4em 0em 0 0em rgba(204, 204, 204, 0.2), -0.9em -0.9em 0 0em rgba(204, 204, 204, 0.2);
+}
+62.5% {
+    box-shadow: 0em -1.4em 0em 0em rgba(204, 204, 204, 0.2), 0.9em -0.9em 0 0em rgba(204, 204, 204, 0.2), 1.3em 0em 0 0em rgba(204, 204, 204, 0.2), 0.9em 0.9em 0 0em rgba(204, 204, 204, 0.5), 0em 1.3em 0 0em rgba(204, 204, 204, 0.7), -0.9em 0.9em 0 0em #ffffff, -1.4em 0em 0 0em rgba(204, 204, 204, 0.2), -0.9em -0.9em 0 0em rgba(204, 204, 204, 0.2);
+}
+75% {
+    box-shadow: 0em -1.4em 0em 0em rgba(204, 204, 204, 0.2), 0.9em -0.9em 0 0em rgba(204, 204, 204, 0.2), 1.3em 0em 0 0em rgba(204, 204, 204, 0.2), 0.9em 0.9em 0 0em rgba(204, 204, 204, 0.2), 0em 1.3em 0 0em rgba(204, 204, 204, 0.5), -0.9em 0.9em 0 0em rgba(204, 204, 204, 0.7), -1.4em 0em 0 0em #ffffff, -0.9em -0.9em 0 0em rgba(204, 204, 204, 0.2);
+}
+87.5% {
+    box-shadow: 0em -1.4em 0em 0em rgba(204, 204, 204, 0.2), 0.9em -0.9em 0 0em rgba(204, 204, 204, 0.2), 1.3em 0em 0 0em rgba(204, 204, 204, 0.2), 0.9em 0.9em 0 0em rgba(204, 204, 204, 0.2), 0em 1.3em 0 0em rgba(204, 204, 204, 0.2), -0.9em 0.9em 0 0em rgba(204, 204, 204, 0.5), -1.4em 0em 0 0em rgba(204, 204, 204, 0.7), -0.9em -0.9em 0 0em #ffffff;
+}
+}
+
+@keyframes invalid-anim {
+    0%   { bottom: -100px; }
+    20%  { bottom: calc(var(--qubot-footer-height) + var(--qubot-input-margin-y)*2 + 20px); }
+    80%  { bottom: calc(var(--qubot-footer-height) + var(--qubot-input-margin-y)*2 + 20px); }
+    100% { bottom: -100px; }
+}
+  
+
+
+
+.qubot-widget-menu {
+
+background-color: #00abff;
+
+padding: 8px 12px;
+
+margin: 0;
+
+color: white;
+
+border-radius: 1.45rem;
+
+width: fit-content;
+
+min-width: 20%;
+
+text-align: center;
+
+position: relative;
+
+cursor: pointer;
+
+transition-duration: .2s;
+}
+.qubot-widget-menu:hover {
+    background-color: #005c89;
+    border-radius: 0 0 1.45rem 1.45rem;
+}
+
+.qubot-widget-menu .qubot-widget-menu-title {
+    cursor: inherit;
+}
+
+.qubot-widget-menu .qubot-widget-menu-content {
+    
+position: absolute;
+    
+opacity: 0;
+    
+bottom: 0;
+    
+left: 0;
+    
+min-width: 120%;
+    
+height: 0px;
+    
+background-color: #00abff;
+    
+border-radius: .45rem .45rem .45rem 0;
+    
+overflow: hidden;
+    
+flex-direction: column;
+    
+display: flex;
+    
+transition-duration: .3s;
+    
+border-color: white;
+}
+
+.qubot-widget-menu .qubot-widget-menu-content .qubot-widget-menu-item {
+    transition-duration: .2s;
+    padding: 8px 14px;
+    display: flex;
+    white-space: nowrap;
+    align-items: center;
+    justify-content: space-between;
+}
+.qubot-widget-menu .qubot-widget-menu-content .qubot-widget-menu-item:hover {
+    background-color: #005c89;
+}
+
+.qubot-widget-menu:hover .qubot-widget-menu-content {
+    opacity: 1;
+    height: fit-content;
+    bottom: 100%;
+    border-style: none none solid none;
+}
+
+.qubot-widget-menu-icon {
+    min-width: 30px;
+    height: 30px;
+    background:         var(--qubot-icon-logo1) no-repeat;
+    background-size: 30px;
+    margin-right: 8px;
+}
+
+.button-icon {
+    height: 100%;
+    margin: 0 6px;
+}
+
+.qubot-shake {
+    animation: shake-anim .7s ease;
+}
+.qubot-input-error {
+    border-color: red !important;
+    background-color: #FF000011 !important;
+    background-color: #fce2e0 !important;
+}
+@keyframes shake-anim {
+    0%   { transform: translateX(0) }
+    20%  { transform: translateX(0) }
+    30%  { transform: translateX(-2px) }
+    40%  { transform: translateX(2px) }
+    50%  { transform: translateX(-2px) }
+    60%  { transform: translateX(2px) }
+    80%  { transform: translateX(0) }
+    100% { transform: translateX(0) }
+}

@@ -1,0 +1,4140 @@
+/********************************************************************************
+* QuData Chat Builder Plugin.
+*
+* Chatbot states editor
+*
+* @copyright Copyright (C) 2021, qudata.com
+********************************************************************************/
+
+:root{
+    --qubot-svg-color-norm:       invert(39%) sepia(0%) saturate(1%) hue-rotate(59deg) brightness(96%) contrast(86%);
+    --qubot-svg-color-hover:      invert(22%) sepia(91%) saturate(2325%) hue-rotate(353deg) brightness(95%) contrast(100%);
+    --qubot-card-shadow:          1px 1px 3px #646464b2;
+    --qubot-card-background:    #fffdf0;        
+    --qubot-scrollbar-width:      5px;
+
+    --qudata-editor-font-family:  '-apple-system', 'BlinkMacSystemFont',  "San Francisco", "Segoe UI", Arial, sans-serif;
+
+    --qubot-svg-shadow:               drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
+    --qubot-editor-background-color: #F9F8F8;
+    --qubot-editor-selectid-color:   #DE614D;
+    --qubot-editor-border-color:     rgb(170, 170, 170);
+    --qubot-editor-border-color2:    rgb(128, 128, 128);
+    --qubot-editor-border-color3:    rgb(96,  96,   96);
+
+    --qubot-btn-opacity:             0.33;
+    --qubot-menu-opacity:            0.33;
+
+
+
+    --qubot-editor-background-color:  #F9F8F8;
+
+    --console-background:         none; /* #589ca7 url('backs/sky.jpg')  */
+    --qubot-editor-background:  #F9F8F8;
+    --console-menu-color:       #F9F8F8;   /* azure;    */
+    --console-menu-font-color:  black; 
+
+    --console-page-color:        white; 
+    --page-width:                  1000px;
+    --page-height:                 800px;    
+
+    --anim-duration: .05s;
+    --anim-duration-slow: .2s;
+    --border-rad: .45rem;
+    --border-rad-medium: 1rem;
+    --hover-clr: orange;
+    --active-clr: orangered;
+    --hover-btn-clr: rgb(247 242 235);
+    --background-color: rgb(245, 245, 245);
+    --background-hover: rgb(206, 206, 206);
+    --border-color: rgb(223, 223, 223);
+    --icons-color: rgba(68, 68, 68);
+    --icons-color-hover: rgba(115, 115, 115);
+}
+
+input[type="checkbox"]:checked::before {
+    margin: 0 !important;
+    height: 100% !important;
+    width: 100% !important;
+  }
+  
+
+.page-editor{
+    padding: 0px;
+    margin: 0px;
+    background-color: var(--qubot-editor-background);
+    display: none;
+    min-width: 800px;
+    height: 100%;
+}    
+
+/******************************************************************************
+                                    Editor page
+******************************************************************************/
+
+.qubot-editor{
+    position:           relative;
+    display:            flex;
+    /* background-color:   var(--qubot-editor-background-color); */
+    background-color:  white;
+    flex-direction:     column-reverse;
+    /* justify-content: flex-end; */
+}
+
+.qubot-editor-body{
+    color:            #1D1D1F;
+    /* background-color: var(--qubot-editor-background-color); */
+    background-color:  white;
+    display:            flex;
+    flex-direction:     row;
+    align-items:        flex-start;
+    overflow: hidden;
+    /* max-height: 600px; */
+    height: 100%;
+}
+
+.qubot-editor-header{
+   margin: 0 5px;
+   display:           flex;
+   flex-direction:     row;
+   align-items:       center;
+   height: 50px;
+}
+
+.qubot-svg{
+    pointer-events:     none;
+    position:           absolute;
+    left:               0px;
+    top:                0px;
+    z-index:            1;
+}
+
+.qubot-svg-shadow{
+    -webkit-filter:     var(--qubot-svg-shadow); 
+    filter:             var(--qubot-svg-shadow);     
+}
+
+#qubot-editor-splitter{
+    width:                3px;
+    background-color:     #cbd5e0;  
+    height:               100%;  
+    cursor:               col-resize;    
+}
+
+.qubot-disable-select {
+    user-select:        none !important; /* supported by Chrome and Opera */
+    -webkit-user-select: none !important; /* Safari */
+    -khtml-user-select:  none !important; /* Konqueror HTML */
+    -moz-user-select:    none !important; /* Firefox */
+    -ms-user-select:     none !important; /* Internet Explorer/Edge */
+}
+/********************************************************************************
+                                      Menu
+********************************************************************************/
+
+.qubot-editor-menu {
+    /* height: 44px; */
+    /* min-width: 785px; */
+    border: 2px solid rgb(223 223 223);
+    background-color:   white;
+    color: #6c757d;
+    font-family:        var(--qudata-editor-font-family);
+    overflow:           hidden;
+    border-radius: .45rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}    
+.qubot-editor-menu.lang-change{
+    border: 2px solid rgb(223 223 223);
+    background-color:   white;
+    color: #6c757d;
+    font-family:        var(--qudata-editor-font-family);
+    /* overflow:           hidden; */
+    border-radius: 0;
+}    
+
+.qubot-editor-menu .item {
+    /* float:              left; */
+    /* color:              black; */
+    padding: .35rem 1.25rem;
+    /* text-decoration:    none; */
+    /* cursor:             pointer; */
+}
+
+.qubot-editor-menu .item.empty  {
+    float:              left;
+    color:              black;    
+    padding:            8px 15px 10px 15px;    
+    margin-left:        30px;
+    text-decoration:    none;    
+    background-color: cornsilk;
+    font-weight:        600;
+}
+
+.qubot-editor-menu .item:hover {
+    background-color: rgb(214, 250, 235) ; 
+}
+
+.qubot-editor-menu.lang-change .submenu {
+    float:              left;
+    border-style: solid;
+    border-width: 2px;
+    border-color: rgb(223 223 223) white;
+    margin: -2px;
+    transition-duration: .2s;
+    background-color: white;
+    overflow: hidden;
+}
+
+.qubot-editor-menu .submenu .submenu-btn {
+    font-size: 16px;
+    color: #4f565c;
+    border:             none;
+    background-color:   inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    line-height: inherit;
+    justify-content: center;
+    transition-duration: .75s;
+    transition-delay: .5s;
+    transition-property: width, max-width;
+    overflow: hidden;
+    height: 37px;
+}
+@media (min-width: 1300px) {
+    .qubot-editor-menu .submenu .submenu-btn {
+        max-width: auto;
+    }
+}
+
+@media (max-width: 1300px) {
+    .qubot-editor-menu .submenu .submenu-btn {
+        max-width: 0px;
+    }
+    .qubot-editor-menu .submenu .qubot-menu-icon-wrap:hover .submenu-btn {
+        max-width: 140px;
+    }
+}
+
+.qubot-editor-menu  .submenu .submenu-content .popup-content,
+.qubot-editor-menu  .submenu:hover .submenu-content .popup-content {
+    left: 100%;
+    top: 0;
+    display: flex;
+    border-radius: .45rem;
+    margin-top: -1px;
+    border-style: solid;
+    border-color: rgb(223 223 223);
+    opacity:    0;
+    visibility: hidden;
+    transition: .5s;
+    margin-left: 6px;
+}
+
+.qubot-editor-menu .submenu .submenu-content .item:hover .popup-content {
+    opacity:    1;
+    visibility: visible;
+}
+
+.qubot-editor-menu  .submenu .submenu-content .popup-content .item:last-child {
+    border-radius: 0 0 .45rem 0;
+}
+.qubot-editor-menu  .submenu .qubot-menu-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4f565c;
+    background-color:   inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    padding-left: 6px;
+    padding-right: 6px;
+}
+.qubot-editor-menu .submenu:first-child .qubot-menu-icon-wrap {
+    /* padding-left: 4px; */
+    /* padding-right: 2px; */
+}
+.qubot-editor-menu .submenu:last-child .qubot-menu-icon-wrap {
+    /* padding-left: 2px; */
+    padding-right: 8px;
+}
+.qubot-editor-menu:last-child .submenu .qubot-menu-icon-wrap {
+}
+.qubot-editor-menu  .submenu .qubot-menu-icon-wrap:hover {
+    background-color: #f4f7f9;
+}
+.qubot-editor-menu  .submenu .qubot-menu-icon-wrap .qubot-icon-wrap {
+    background-repeat: no-repeat;
+    margin-right: .35rem;
+}
+.qubot-menu-icon {
+    background-image: url('./svg/menu/menu.svg');
+    height: 25px;
+    width: 20px;
+    margin-left: 6px;
+}
+.qubot-list-icon {
+    background-image: url('./svg/menu/list.svg');
+}
+.qubot-edit-step-icon {
+    background-image: url('./svg/menu/edit-bot.svg');
+    background-size: contain;
+    height: 20px;
+    width: 20px;
+    margin-left: 6px;
+}
+.qubot-help-icon {
+    background-image: url('./svg/menu/help.svg');
+    background-size: contain;
+    height: 20px;
+    width: 20px;
+    margin-left: 6px;
+}
+.qubot-options-icon {
+    background-image: url('./svg/menu/options.svg');
+    background-size: contain;
+    height: 20px;
+    width: 20px;
+    margin-left: 6px;
+}
+.qubot-template-icon {
+    background-image: url('./svg/menu/example.svg');
+    background-size: contain;
+    height: 20px;
+    width: 20px;
+    margin-left: 6px;
+}
+.qubot-example-icon {
+    background-image: url('./svg/menu/template.svg');
+    background-size: contain;
+    height: 20px;
+    width: 20px;
+    margin-left: 6px;
+}
+.qubot-edit-bot-icon {
+    background-image: url('./svg/menu/edit-step.svg');
+    height: 25px;
+    width: 25px;
+    margin-left: 6px;
+}
+
+.qubot-editor-menu  .submenu .submenu-content {
+    min-width:          60px;
+    background-color: white;
+    display:            flex;
+    flex-direction:    column;
+    position:           absolute;
+    z-index: 21;
+    border-radius: .45rem;
+    border-style: solid;
+    border-color: rgb(223 223 223);
+    border-width: 2px;
+    /* overflow: hidden; */
+    font-size: 16px;
+    opacity:    0;
+    transition-duration: .5s;
+    visibility: hidden;
+    margin-top: 6px;
+}
+
+.qubot-editor-menu .submenu:hover .submenu-content {
+    /* height: auto; */
+    opacity:    1;
+    visibility: visible;
+}
+
+.qubot-editor-menu  .submenu:last-child .submenu-content {
+    
+margin-left: -5px;
+}
+.qubot-editor-menu .submenu:first-child .submenu-content {
+
+margin-left: 2px;
+}
+.qubot-editor-menu.lang-change .submenu .submenu-content {
+    border-radius: .45rem;
+    border-style: solid;
+}
+
+.qubot-editor-menu  .submenu .submenu-content .item{
+    color: #4f565c;
+    cursor:             pointer;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.qubot-editor-menu .submenu .submenu-content .item.devider {
+    border-style: none none solid none;
+    border-width: 1px;
+    border-color: #eeeeee;
+}
+.qubot-editor-menu .submenu .submenu-content .item .check {
+    
+cursor: pointer;
+    
+width: 30px;
+    
+margin-left: 3px;
+    
+height: 20px;
+}
+
+.qubot-editor-menu .submenu .submenu-content .item svg {
+    width: 32px;
+}
+
+.qubot-editor-menu .submenu .submenu-content .item div.svg {
+    width: 32px;
+    max-width: 12px;
+    height: 12px;
+    border-radius: 100px;
+    margin-right: 10px;
+    margin-left: -6px;
+}
+
+.qubot-editor-menu .submenu .submenu-content .item .svg.round {
+    background-color: #3F80EA;
+}
+
+.qubot-editor-menu .submenu .submenu-content .item .check.on {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%233F80EA' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
+    background-position-y: center;
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+.qubot-editor-menu .submenu .submenu-content .item.iconed {
+    padding: .35rem 0.25rem .35rem 1.25rem;
+}
+
+.qubot-editor-menu .submenu .submenu-content .item:hover {
+    background-color: #f4f7f9;
+}
+.qubot-editor-menu .submenu .submenu-content .item:first-child:hover {
+    border-top-right-radius: inherit;
+    border-top-left-radius: inherit;
+}
+.qubot-editor-menu .submenu .submenu-content .item:last-child:hover {
+    border-bottom-right-radius: inherit;
+    border-bottom-left-radius: inherit;
+}
+
+.qubot-editor-menu .submenu-content .checked{
+    font-weight: bold;
+}
+
+.qubot-editor-run{
+    position:           relative;
+    min-width: fit-content;
+    margin: 4px 18px 4px 24px;
+    padding: 0 .75rem;
+    background-color:   #0075FF;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #0069d9;
+    color:               white;
+    font-weight: 400;
+    display:            flex;
+    align-items:        center;
+    cursor:             pointer;
+    border-radius: .45rem;
+    font-size: 22px;
+    text-transform: uppercase;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.qubot-editor-run-tuto {
+    position:           absolute;
+    border:             1px solid #3f80ea;
+    width:              300px;
+    background-color: #fff;
+    border-radius: 0.3rem;
+    top: 60px;
+    right: 0;
+    display: none;
+    z-index: 999;
+    box-shadow: 10px 10px 20px #646464b2;
+}
+.qubot-editor-run-tuto div {
+    font-family: sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.625;
+    font-size: 0.75rem;
+    color: #6c757d;
+    text-transform: none;
+    padding: 1rem;
+}
+.qubot-editor-run-tuto h3 {
+    border-top-left-radius: 0.3rem;
+    border-top-right-radius: 0.3rem;
+    border-bottom:  1px solid rgba(0, 0, 0, .2);
+    background-color: #f5f8fe;
+    padding: 0.5rem 1rem;
+    margin: 0;
+    font-size: 0.825rem;
+    color: #495057;
+}
+
+.qubot-editor-run-tuto::after {
+    position: absolute;
+    display: block;
+    content: "";
+    border-color: transparent;
+    border-style: solid;
+    top: -8px;
+    right: 60px;
+    border-width: 0 0.5rem 0.5rem 0.5rem;
+    border-bottom-color: #3f80ea;
+}
+
+.qubot-run-tuto {
+    position:           fixed;
+    border:             1px solid #3f80ea;
+    width:              300px;
+    background-color: #fff;
+    border-radius: 0.3rem;
+    bottom: 150px;
+    right: 0;
+    display: none;
+    z-index: 999;
+    box-shadow: 10px 10px 20px #646464b2;
+}
+
+.qubot-run-tuto div {
+    font-family: sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.625;
+    font-size: 0.75rem;
+    color: #6c757d;
+    text-transform: none;
+    padding: 1rem;
+}
+
+.qubot-run-tuto h3 {
+    border-top-left-radius: 0.3rem;
+    border-top-right-radius: 0.3rem;
+    border-bottom:  1px solid rgba(0, 0, 0, .2);
+    background-color: #f5f8fe;
+    padding: 0.5rem 1rem;
+    margin: 0;
+    font-size: 0.825rem;
+    color: #495057;
+}
+
+.qubot-run-tuto::after {
+    position: absolute;
+    display: block;
+    content: "";
+    border-color: transparent;
+    border-style: solid;
+    bottom: -0.55rem;
+    right: 75px;
+    border-width: 0.5rem 0.5rem 0;
+    border-top-color: #3f80ea;
+}
+
+.qubot-run-tuto2 {
+    position:           absolute;
+    border:             1px solid #3f80ea;
+    width:              300px;
+    background-color: #fff;
+    border-radius: 0.3rem;
+    bottom: 150px;
+    right: 0;
+    display: none;
+    z-index: 999;
+}
+
+.qubot-editor-run:hover{
+    background-color: #0069d9;
+}
+
+.qubot-editor-name{
+    color: #2c67d2;
+    font-size:          24px;
+    font-weight: bold;
+    cursor: default;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    flex: 1;
+}
+/******************************************************************************
+                                    State editor
+******************************************************************************/
+.qubot-editor .qubot-editor-body .state-editor{
+    background-color:   inherit;
+    min-width: 400px;
+    max-width:          1000px;
+    width: 450px;
+    height: 100%;
+    padding:            0px 3px 10px 5px;
+    position:           relative;
+    /*
+    position:           fixed;    
+    left:             100px;
+    top:             100px;
+    z-index:          1000;
+    */
+    display:            flex;
+    flex-direction:     column;
+    transition-duration: .2s;
+}
+
+.qubot-editor .qubot-editor-body #qubot-collapse-button{
+    /* width: 10px; */
+    height: 100%;
+    padding:            0px 3px 10px 5px;
+    margin:            0px 3px 10px 5px;
+    position:           relative;
+    display:            flex;
+    flex-direction:     column;
+    justify-content: center;
+    /* border: 1px solid #cbcbcb; */
+    border-radius: 0.25rem;
+    transition-duration: .2s;
+}
+
+.qubot-editor .qubot-editor-body #qubot-collapse-button:hover{
+    cursor: pointer;
+    background-color: rgb(245, 245, 245);
+}
+
+.qubot-editor .qubot-editor-body #qubot-collapse-button #cta{
+    background:         url(svg/double-arrow.svg) no-repeat;
+    width: 10px;
+    height: 10px;
+}
+
+.qubot-editor .qubot-editor-body   .info{
+    font-size:          14px;
+    /* position:           absolute;
+    top:                0px;
+    left:               10px; */
+}
+.qubot-editor .qubot-editor-body .state-editor  .info2{
+    font-size:          14px;
+    padding-left:       5px;
+    margin-bottom:      1px;
+    color: #6c757d;
+    padding-top: 14px;
+}
+
+.qubot-editor .qubot-editor-body .state-editor .qubot-caption{
+    /* height:             40px; */
+    margin-bottom:      5px;
+    display:            flex;
+    flex-direction:     row;
+    justify-content:    space-between;
+    /* box-shadow:         0px 2px 4px #646464b2; */
+    z-index:            1;
+}
+
+.qubot-editor .qubot-editor-body .state-editor .qubot-caption .input{
+    outline:           none;
+    font-size:         18px;
+    border:            1px solid   var(--qubot-editor-border-color3);           
+    margin-right:       1px;
+    padding-left:      10px;    
+    min-width:          50px !important;
+    flex: 1;
+}
+
+.qubot-editor .qubot-editor-body .state-editor .qubot-caption .checkbox{
+    width:  40px;
+    height: 40px;
+    margin: 0px 1px 0px 2px;
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-caption .checkbox::before{
+    width:  inherit;
+    height: inherit;    
+}
+/*
+.qubot-editor .qubot-editor-body .state-editor .qubot-caption  input[type="checkbox"]:checked{         
+    
+    filter:  invert(100%)  brightness(5); 
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-caption  input[type="checkbox"]::after{     
+    filter:  invert(100%)  brightness(5); 
+*/
+
+.qubot-editor .qubot-editor-body .state-editor .qubot-content{
+    border: 1px solid #cbcbcb;
+    border-radius: .45rem;
+    background-color: white;
+    padding: 5px;
+    resize:             none;
+    display:            flex;
+    flex-direction:     column;
+    margin-right: 10px;
+    position: relative;
+    margin-top: 8px;
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-content::-webkit-scrollbar             {  width: var(--qubot-scrollbar-width);    }
+.qubot-editor .qubot-editor-body .state-editor .qubot-content::-webkit-scrollbar-track       {  background: #f1f1f1;       }
+.qubot-editor .qubot-editor-body .state-editor .qubot-content::-webkit-scrollbar-thumb       {  background: #aaa;          }
+.qubot-editor .qubot-editor-body .state-editor .qubot-content::-webkit-scrollbar-thumb:hover {  background: #555;    }
+
+.qubot-editor .qubot-editor-body .state-editor .qubot-content .qubot-message{
+    padding: 4px 8px 4px 8px;
+    /* background-color: var(--background-color); */
+    cursor: default;
+    position:           relative;
+    border: 1px solid  rgba(0,0,0,.125);
+    border-radius: .45rem;
+    margin:             3px;
+    font-size:          18px;
+    font-family:        var(--qudata-editor-font-family);
+    display:            flex;
+    flex-direction:     column;
+    /* justify-content:    space-between; */
+    background-color: var(--console-menu-color);
+}
+
+.qubot-editor .qubot-editor-body .state-editor .qubot-content .qubot-message .item-actions{
+    border:             1px dotted  var(--qubot-editor-border-color2);
+    background-color: white;
+    height:             30px;
+    margin:             4px 0px;
+    padding:            0;
+    position:           relative;
+    cursor: default;
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-content .qubot-message .item-actions:hover{    
+    border:              1px solid var(--qubot-editor-selectid-color) !important;
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-content .qubot-message .item-actions:focus{    
+    border:              2px solid var(--qubot-editor-selectid-color) !important;
+}
+
+.qubot-editor .qubot-editor-body .state-editor .qubot-content .qubot-message .item-actions .actions-text{
+    font-size:          16px;
+    text-align:         center;
+    height:             100%;
+    display:            flex;
+    flex-direction:     row;
+    justify-content:    center;
+    align-items:        center;
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-content .qubot-message .item-actions:hover > .qubot-btn       { opacity:var(--qubot-btn-opacity);  }
+.qubot-editor .qubot-editor-body .state-editor .qubot-content .qubot-message .item-actions:hover > .qubot-drag-menu { 
+    opacity:            var(--qubot-menu-opacity);  
+    display:            flex;  
+    flex-direction:     row;
+}
+
+.qubot-editor .qubot-editor-body .state-editor .qubot-content .qubot-message .item-text{           
+    margin:             3px 0px;    
+    position:           relative;
+    display:             flex;   
+    flex-direction:     row; 
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-content .qubot-message .item-text:hover > .qubot-btn      { opacity: var(--qubot-btn-opacity);  }
+.qubot-drag-menu.show:not(.is-drag),
+.qubot-drag-menu:hover {
+    opacity: 1;
+    display:            flex;
+    flex-direction:     row;
+    z-index:            100;
+}
+
+.qubot-editor .qubot-editor-body .state-editor .qubot-content .qubot-message .item-text .qubot-text{    
+    font-family:        inherit !important;
+    font-size:          inherit !important;   
+    border:             1px solid  var(--qubot-editor-border-color3);        
+    box-sizing:         content-box !important;
+    background-color:   #F9F8F8;     
+    resize:             none;     
+    min-height:         25px;            
+    padding:            5px;     
+    flex:               1;   
+    scrollbar-width:    thin;  
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message  .item-text .qubot-text:hover{    
+    border:             1px solid var(--qubot-editor-selectid-color) !important;    
+ }
+ .qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message .item-text  .qubot-text:focus{    
+    outline: none; 
+    border:             2px solid var(--qubot-editor-selectid-color) !important;
+ }
+
+ .qubot-editor .qubot-editor-body .state-editor .qubot-content .qubot-message .item-text .comments{
+    font-family:        monospace;
+    font-size:          12px !important;         
+    background-color: rgb(253, 245, 232);
+    box-sizing:         content-box !important;
+    /*resize:             vertical;    */
+    resize:             none;     
+    min-height:         15px;
+    height:             15px;
+    padding:            5px;                
+    flex:               1;   
+    border:             none;
+    scrollbar-width:    thin;  
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-content .qubot-message .item-text .comments:hover > .qubot-drag-menu{ 
+    opacity:            var(--qubot-menu-opacity);   
+    display:            flex;  
+    flex-direction:     row;
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-content .qubot-message .item-text .comments:focus{
+    outline: none; 
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message .item-row{
+    border:             1px dotted  var(--qubot-editor-border-color3);        
+    background-color:   #F9F8F8;
+    height:             50px; 
+    margin:             2px 0px;
+    padding:            2px;
+    position:           relative;
+    display:            flex;    
+    flex-direction:     row;
+    justify-content:    space-between;
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-content .qubot-message .item-row:hover > .qubot-drag-menu { 
+    opacity:            var(--qubot-menu-opacity);   
+    display:            flex;  
+    flex-direction:     row;
+}
+
+.qubot-editor .qubot-editor-body .state-editor .qubot-content .qubot-message .item-row .qubot-button{           
+    margin:             3px;        
+    padding:            0px  !important;
+    border:             none !important;   
+    position:           relative;    
+    display:            flex; 
+    flex-direction:     row;   
+    justify-content:    space-between;    
+    flex:               1    
+}
+.qubot-button:hover > .qubot-btn { 
+    opacity: var(--qubot-btn-opacity);  
+}
+
+.qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message .item-row .qubot-button .qubot-text{    
+    border:             1px solid var(--qubot-editor-border-color2);
+    font-size:          18px;     
+    border-radius:      10px;          
+    box-sizing:         content-box !important;    
+    /*resize:             vertical;    */
+    resize:             none;     
+    width:              100%;  
+    box-sizing:         border-box; 
+    text-align:         center;
+    scrollbar-width:    thin;  
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message .item-row .qubot-button .qubot-text:hover{    
+   border:              1px solid var(--qubot-editor-selectid-color) !important;
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message .item-row .qubot-button .qubot-text:focus{    
+    outline: none; 
+    border:             2px solid var(--qubot-editor-selectid-color) !important;
+}
+ 
+
+.qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message .item-images{
+    border:             1px dotted   var(--qubot-editor-border-color3);               
+    margin:             2px 0px;
+    padding:            2px;
+    position:           relative;
+    display:            flex;
+    flex-direction:     column;
+    justify-content:    space-between;
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-content .qubot-message .item-images:hover > .qubot-btn       { opacity: var(--qubot-btn-opacity);  }
+.qubot-editor .qubot-editor-body .state-editor .qubot-content .qubot-message .item-images:hover > .qubot-drag-menu { 
+    opacity:            var(--qubot-menu-opacity);  
+    display:            flex;  
+    flex-direction:     row;
+}
+
+.qubot-editor .qubot-editor-body .state-editor .qubot-content .qubot-message .item-images .image{        
+    margin:             3px;    
+    position:           relative;
+    display:            flex;
+    flex-direction:     row;
+    justify-content:    space-between;    
+    flex:               1    
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-content .qubot-message .item-images .image:first-child > .qubot-btn.del {
+    display: none !important;
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-content .qubot-message .item-images .image:hover > .qubot-btn   { 
+    opacity: var(--qubot-btn-opacity); 
+}
+
+
+.qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message .item-images .image .qubot-text{
+    border: 1px solid   var(--qubot-editor-border-color2);
+    background-color:   #ebfdef;
+    font-size:          16px;
+    /* border:             none; */
+    box-sizing:         content-box !important;
+    resize:             none;
+    min-height:         30px;
+    height:             30px;
+    width:              100%;
+    padding: 5px 50px 5px 30px !important;
+    box-sizing:         border-box;
+    scrollbar-width:    thin;
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message .item-images .image .qubot-text:hover {
+    border:             1px solid var(--qubot-editor-selectid-color) !important;
+    background-color:  white;  
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message .item-images .image .qubot-text:focus{    
+    outline: none; 
+    border:             2px solid var(--qubot-editor-selectid-color) !important;
+ }
+
+
+ /****************************************** gallery ******************************/
+
+ .qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message .gallery{
+    border:             1px dotted   var(--qubot-editor-border-color3);               
+    margin:             2px 0px;
+    position:           relative;
+    display:            flex;
+    flex-direction:     column;
+    justify-content:    space-between;
+}    
+.qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message .gallery:hover > .qubot-drag-menu{ 
+    opacity:            var(--qubot-menu-opacity);   
+    display:            flex;  
+    flex-direction:     row;
+}
+
+.qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message .gallery .slide{
+    position:           relative;
+    margin:             5px 0;     
+    display: flex;
+    flex-direction: row;
+}    
+.qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message .gallery .slide:hover > .qubot-btn  { 
+    opacity: var(--qubot-btn-opacity);  
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message .gallery .slide .qubot-text{    
+    border:             1px solid   var(--qubot-editor-border-color2);   
+    background-color:   #ebfdef;       
+    font-size:          16px; 
+    border:             none;           
+    box-sizing:         content-box !important;   
+    resize:             none;     
+    min-height:         20px !important;
+    height:             25px;
+    flex:               1;
+    padding:            5px !important;
+    box-sizing:         border-box;   
+    scrollbar-width:    thin;  
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message .gallery .slide .qubot-text:hover {
+    border:             1px solid var(--qubot-editor-selectid-color) !important;
+    background-color:  white;  
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message .gallery .slide .qubot-text:focus{    
+    outline: none; 
+    border:             2px solid var(--qubot-editor-selectid-color) !important;
+ }
+/************************************************************************************/
+
+
+ .qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message  .map,
+ .qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message  .video,
+ .qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message  .audio
+ {
+    border:             1px solid   var(--qubot-editor-border-color2);
+    background-color:   #fdedeb;
+    font-size:          16px;
+    /* border:             none; */
+    resize:             none;
+    min-height:         40px !important;
+    height:             40px;
+    width:              100%;
+    padding:            5px !important;
+    box-sizing:         border-box;
+    scrollbar-width:    thin;
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message  .video{
+    background-color:   rgb(211, 211, 253);       
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message  .audio{
+    background-color:   rgb(196, 252, 247);      
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message  .map:hover, 
+.qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message  .video:hover,
+.qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message  .audio:hover
+{
+    border:             1px solid var(--qubot-editor-selectid-color) !important;
+    background-color:  white;  
+}
+.qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message  .map:focus,
+.qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message  .video:focus,
+.qubot-editor .qubot-editor-body .state-editor .qubot-content  .qubot-message  .audio:focus
+{    
+    outline: none; 
+    border:             2px solid var(--qubot-editor-selectid-color) !important;
+ }
+
+
+.qubot-editor .qubot-editor-body .state-editor .qubot-content .item-input {
+
+font-size: 15px;
+
+padding: 6px 12px;
+
+text-align: center;
+
+width: 100%;
+
+border-style: solid;
+
+border-color: #e2e2e2;
+
+border-radius: 25px;
+
+border-width: 1px;
+
+cursor: default;
+
+margin: 10px 0 4px 0;
+
+transition-duration: var(--anim-duration);
+
+/*
+
+    border-color:     #ccc;
+    border-style:       solid;
+    border-width:       1px;    
+    border-radius:      20px;
+    background-color:  white;
+
+    text-align:         center;
+    color:              rgb(109, 108, 108);
+    font-size:          16px;
+    padding-top:        5px;
+    height:             30px;
+    width:              95%;    
+    overflow:           hidden;
+    margin:             4px 10px; */
+
+user-select:        none !important; /* supported by Chrome and Opera */
+
+-webkit-user-select: none !important; /* Safari */
+
+-khtml-user-select:  none !important; /* Konqueror HTML */
+
+-moz-user-select:    none !important; /* Firefox */
+
+-ms-user-select:     none !important; /* Internet Explorer/Edge */
+
+color: rgb(120, 120, 120);
+}
+    .qubot-editor .qubot-editor-body .state-editor .qubot-content .item-input:hover {
+        border-color: var(--hover-clr);
+        /* color: rgb(120, 120, 120); */
+    }
+    .qubot-editor .qubot-editor-body .state-editor .qubot-content .item-input.active {
+        border-color: var(--hover-clr);
+        /* color: rgb(120, 120, 120); */
+    }
+.qubot-state-editor-active-item {
+    border:     1px solid var(--qubot-editor-selectid-color) !important;
+}
+
+/******************************************************************************
+                                    State editor actions
+******************************************************************************/
+.qubot-editor .qubot-editor-body .state-editor .actions{
+    /* border:             1px solid  var(--qubot-editor-border-color3); */
+    padding: 16px 16px 16px 16px;
+    background-color: var(--background-color);
+    position:           relative;
+    flex:               1;
+    display:            flex;
+    flex-direction:     column;
+    justify-content: flex-start;
+    border-radius: var(--border-rad);
+    margin-right: 10px;
+    margin-bottom: 4px;
+}
+.qubot-editor .qubot-editor-body .state-editor .actions.properties{
+    flex-direction: row;
+}
+.qubot-editor .qubot-editor-body .state-editor .actions-container {
+    /* height:             500px;
+    overflow:           scroll; */
+    /* width: 100%; */
+}
+
+.qubot-editor .qubot-editor-body .state-editor .actions .action-add{
+    border: 1px dashed  #c5c5c5;
+    background-color: #f9f8f8;
+    flex:               1;
+    display:            flex;
+    flex-direction:     column;
+    cursor:             pointer;
+    justify-content:    center;
+    align-items:        center;
+    border-radius: .45rem;
+}
+.qubot-editor .qubot-editor-body .state-editor .actions .action-add:hover{
+    border-color: var(--hover-clr);
+    background-color: var(--hover-btn-clr);
+}
+
+.qubot-editor .qubot-editor-body .state-editor .action{
+    font-size:          16px;
+    margin: 0;
+    padding: 3px;
+    position:           relative;
+    display:            flex;
+    flex-direction:     row;
+    /* align-items:        center; */
+    flex-wrap:          wrap;
+}
+.qubot-editor .qubot-editor-body .state-editor .action:hover > .qubot-btn, .qubot-drag-menu     { opacity: var(--qubot-btn-opacity);  }
+.qubot-editor .qubot-editor-body .state-editor .action:hover > .qubot-drag-menu { 
+    opacity:            var(--qubot-menu-opacity);   
+    display:            flex;  
+    flex-direction:     row;
+}
+
+.qubot-editor .qubot-editor-body .state-editor .action .actions{
+    background-color: rgb(225, 225, 225);
+}
+
+.qubot-editor .qubot-editor-body .state-editor .action .actions .action .actions{
+    /* background-color: rgb(205, 205, 205); */
+}
+
+.qubot-editor .qubot-editor-body .state-editor .action .actions .action .actions .action .actions{
+    /* background-color: rgb(185, 185, 185); */
+}
+
+.qubot-editor .qubot-editor-body .state-editor .action .actions .action .actions .action .actions .action .actions{
+    /* background-color: rgb(165, 165, 165); */
+}
+
+
+.qubot-editor .qubot-editor-body .state-editor .action .then{
+    margin-bottom:     4px;
+    color:            #069;
+}
+.qubot-editor .qubot-editor-body .state-editor .action .name{
+    /*
+    border:             1px solid  black; 
+    background-color:  white;    
+    padding:            0px 0px 5px 0px;        
+    text-align:         center;
+    */
+    /*
+    position:           absolute;
+    left:               8px;
+    top:                0px;
+    */
+    font-size:          18px;
+    color:            #069;
+    height:             25px;
+    margin-right:       5px;
+    min-width:          50px;
+}
+
+.qubot-editor .qubot-editor-body .state-editor .actions .action .input{
+    height:             25px !important;
+    font-size:          inherit !important;
+    font-family:        monospace;
+    padding:            0px 5px 0px 5px;
+    box-sizing:         content-box !important;
+    outline:            none;
+    scrollbar-width:    thin;
+    flex:               1;
+    width: 100%;
+}
+
+.qubot-editor .qubot-editor-body .state-editor .actions .action .textarea{
+    border:             1px solid  var(--qubot-editor-border-color3); 
+    font-family:        monospace;    
+    font-stretch:       extra-condensed;
+    font-size:          inherit !important;         
+    resize:             none;  /*vertical; */
+    min-height:         30px;
+    height:             30px;
+    box-sizing:         content-box !important;
+    padding:            2px 5px;            
+    margin:             0px 0px 2px 0px;    
+    outline:            none; 
+    overflow-x:         auto;
+    scrollbar-width:    thin;      
+}
+
+.qubot-editor .qubot-editor-body .state-editor .actions .action .textarea-if{
+    border:             1px solid  var(--qubot-editor-border-color3); 
+    background-color: rgb(226, 250, 226);
+    font-family:        monospace;    
+    font-stretch:       extra-condensed;
+    font-size:          inherit !important;     
+    box-sizing:         content-box !important;    
+    resize:             none; /* vertical;  */     
+    min-height:         25px;
+    height:             25px;
+    padding:            2px 5px;            
+    margin:             0px 0px 2px 0px;    
+    outline:            none;     
+    scrollbar-width:    thin;      
+}
+
+
+.qubot-editor .qubot-editor-body .state-editor .actions .action .comments{    
+    font-size:          12px !important;         
+    background-color: rgb(253, 245, 232);
+    resize:             none; /*vertical;       */
+    box-sizing:         content-box !important;
+    min-height:         15px;
+    height:             15px;
+    padding:            2px 5px;            
+    margin-left:        0px;
+    border:             none;
+    outline:            none; 
+    scrollbar-width:    thin;      
+    flex:               1;
+}
+
+.qubot-editor .qubot-editor-body .state-editor .actions .action .intents{    
+    font-size:          12px !important;         
+    background-color: white;
+    resize:             none; /*vertical;       */
+    min-height:         15px;
+    height:             15px;
+    padding:            2px 5px;            
+    margin-bottom:      5px;
+    border:             none;
+    box-sizing:         content-box !important;
+    outline:            none; 
+    scrollbar-width:    thin;                  
+}
+
+
+.qubot-editor .qubot-editor-body .state-editor .actions .action .select{
+    font-size:          18px;
+    font-family:        var(--qudata-editor-font-family) !important;
+    line-height:        18px;
+    height:             25px !important;    
+    box-sizing:         content-box !important;    
+    margin-right:       10px;
+}
+
+.qubot-editor .qubot-editor-body .state-editor .actions .action .option{    
+    height:             25px !important;  
+    box-sizing:         content-box !important;      
+}
+
+.qubot-editor .qubot-editor-body .state-editor .actions .action  .color{
+    height:             40px;
+    width:              100%;
+    box-sizing:         content-box !important;   
+}
+.qubot-editor .qubot-editor-body .state-editor .actions .action  .checkbox{
+    height:             24px;
+    width:              24px;    
+    margin:             0px  10px !important;
+    box-sizing:         content-box !important;
+}
+
+.qubot-editor .qubot-editor-body .state-editor .actions .action .group{
+    display:            flex;
+    flex-direction:     row;
+    align-items:       center;    
+}
+
+.qubot-editor .qubot-editor-body .state-editor .actions .action .group .label{
+    margin:             5px 5px 5px 0px;    
+    min-width:          64px;
+}
+
+.qubot-editor .qubot-editor-body .state-editor .actions .action .group .input{
+    margin:             5px 5px 5px 0px;    
+    width:              100px;
+    box-sizing:         content-box !important;
+}
+
+
+.qubot-editor .qubot-editor-body .state-editor .actions .action .group .select{
+    font-size:          18px;
+    line-height:        18px;
+    height:             30px !important;   
+    box-sizing:         content-box !important;     
+}
+
+
+.qubot-editor .qubot-editor-body .state-editor .actions .action .group .color{
+    height:             30px;
+    width:              100px;
+    margin:             5px 0px 0px 15px;
+    box-sizing:         content-box !important;
+}
+
+.qubot-editor .qubot-editor-body .state-editor .actions .action .group .checkbox{
+    height:             24px;
+    width:              24px;
+    margin:             5px 20px 5px 20px;
+    box-sizing:         content-box !important;
+}
+.qubot-editor .qubot-editor-body .state-editor .actions .action .group .checkbox::before{
+    width:  inherit;
+    height: inherit;    
+}
+
+.qubot-editor .qubot-editor-body .state-editor .action .hr{
+    min-width: 300px;
+    width: 100%;    
+}
+
+
+.qubot-editor .qubot-editor-body .state-editor .actions .action ul{
+    margin:  3px 0px 3px 7px;
+}
+
+/******************************************************************************
+                                    Card list
+******************************************************************************/
+.qubot-editor ::-webkit-scrollbar            { height: var(--qubot-scrollbar-width); width: var(--qubot-scrollbar-width);    }
+.qubot-editor ::-webkit-scrollbar-track      { background: #f1f1f1;}
+.qubot-editor ::-webkit-scrollbar-thumb      { background: #aaa;  }
+.qubot-editor ::-webkit-scrollbar-thumb:hover{ background: #555;  }
+
+.qubot-editor .qubot-editor-body .states-list{
+    background-color:   white; /*  var(--qubot-editor-background-color); */
+    padding:            20px 0px 0px 20px;
+    position:           relative;
+    height: 600px;
+    overflow-y:         auto;
+    overflow-x: auto;
+}
+.qubot-editor .qubot-editor-body .qubot-info-list-states-wrapper .qubot-info-list-states{
+    font-size:          14px;    
+    min-width:          200px;    
+    display:            flex;
+    flex-direction:     row;
+    justify-content: space-between;
+}
+
+.qubot-editor .qubot-editor-body .qubot-info-list-states-wrapper .qubot-info-list-states .qubot-zoom-in{
+    background:         url(svg/zoom_in.svg) no-repeat;
+    background-size:    20px;
+    /* width:              20px; */
+    height:             20px;
+    /* margin:             0 10px 0 20px; */
+    cursor:             pointer;
+    opacity:            0.3;
+    padding: 0 10px 0 25px;
+    min-width: fit-content;
+}
+.qubot-editor .qubot-editor-body .qubot-info-list-states-wrapper .qubot-info-list-states .qubot-zoom-in:hover{       
+    opacity:            1;
+}
+.qubot-editor .qubot-editor-body .qubot-info-list-states-wrapper .qubot-info-list-states .qubot-zoom-in:active{
+    transform:          scale(0.9);
+}
+
+.qubot-editor .qubot-editor-body .qubot-info-list-states-wrapper .qubot-info-list-states .qubot-zoom-out{
+    background:         url(svg/zoom_out.svg) no-repeat;
+    background-size:    20px;
+    /* width:              20px; */
+    height:             20px;
+    /* margin:             0 10px 0 20px ; */
+    cursor:             pointer;
+    opacity:            0.3;
+    padding: 0 10px 0 25px;
+    min-width: fit-content;
+}
+.qubot-editor .qubot-editor-body .qubot-info-list-states-wrapper .qubot-info-list-states .qubot-zoom-out:hover{   
+    /* filter: invert(14%) sepia(71%) saturate(6729%) hue-rotate(358deg) brightness(103%) contrast(120%);*/
+    opacity:            1;
+}
+.qubot-editor .qubot-editor-body .qubot-info-list-states-wrapper .qubot-info-list-states .qubot-zoom-out:active{
+    transform:          scale(0.9);
+}
+
+
+ .qubot-state-space{
+     /*
+    position:           absolute;
+    top:                0px;
+    left:               0px;
+    */
+     background:         url('backs/grid04.png') repeat;
+     display:            flex;
+     flex-direction:     row;
+     flex-wrap:          wrap;
+     align-items:        flex-start;
+     align-content:      flex-start;
+     width: 5000px;
+     height:  5000px;
+}
+
+.qubot-state-space .qubot-state{
+    border:             2px solid var(--qubot-editor-border-color);
+    border-radius:      10px;
+    background-color:   white; /* var(--qubot-card-background);  */
+    position:           relative;
+    padding:            0px 3px 3px 3px;
+    max-width:          195px;
+    min-width: 195px;
+    min-height:         50px;
+    z-index:            2;
+    display:            flex;
+    flex-direction:     row;
+    justify-content:    flex-start;
+    /* transition:         .2s; */
+}
+
+.qubot-state-space .qubot-state.one-state {
+
+}
+
+.qubot-state-space .qubot-state .qubot-caption{
+    font-size:          12px;
+    font-weight:        600;
+    line-height:        13px;
+    padding:            3px 8px;
+    height:             17px;
+    width:              90%;
+    position:           absolute;
+    overflow:           hidden;
+    text-overflow:      ellipsis;
+}    
+.qubot-state-space .qubot-state:not(.one-state) .qubot-caption:hover{    
+    cursor:             grab;   
+}    
+.qubot-start-state > .label-start::before {
+    content:           "start";
+    position:           absolute;
+    top:                -2px;
+    right:               5px;    
+    font-size:          12px;    
+    font-weight:        600;
+}
+
+.qubot-start-state{
+    max-width:          193px !important;
+    min-width:          183px !important;
+    border:             3px solid var(--qubot-editor-border-color3) !important;
+}
+
+.qubot-state-space .qubot-add-state{   
+    border:             1px solid  var(--qubot-editor-border-color);
+    background-color:   var(--qubot-card-background);        
+    position:           relative;
+    width:              190px;    
+    min-height:         60px;
+    /*margin:             0px 8px 8px 0px;*/
+    /* box-shadow:         var(--qubot-card-shadow); */
+    opacity:            0.5;
+    transition:         opacity 0.3s;    
+    display:            flex;  
+    flex-direction:     column;
+    justify-content:    flex-start;
+    align-items:        center;
+}
+
+.qubot-state-space .qubot-add-state:hover{   
+    opacity:            1;
+}
+.qubot-state-space .qubot-add-state .qubot-caption{
+    height: 20px;
+    width: 100%;
+    padding: 0px 0px 5px 0px;
+    font-size: 10px;
+    text-align: center;
+    background-color:    #f0eee5 !important;
+}   
+
+.qubot-state-space .qubot-add-state .qubot-caption:hover{    
+    cursor:             grab;   
+}    
+
+.qubot-state-space .qubot-add-state .qubot-content{
+    width:              100%;
+    background-color:   var(--qubot-card-background);        
+    cursor:             pointer; 
+    flex:               1;
+    display:            flex;  
+    flex-direction:     row;
+    align-items:        center;    
+    justify-content:    center
+}
+
+.qubot-state-space .qubot-folder{   
+    border:             1px solid  var(--qubot-editor-border-color);
+    background-color:   var(--qubot-card-background);        
+    position:           relative;
+    min-width:              193px;    
+    min-height:         60px;
+    /*margin:             0px 8px 8px 0px;*/
+    /* box-shadow:         var(--qubot-card-shadow); */
+    display:            flex;      
+    flex-direction:     column;
+    justify-content:    flex-start;
+    align-items:        center;    
+}
+.qubot-state-space .qubot-folder:hover > .qubot-btn { opacity: var(--qubot-btn-opacity);    }
+
+.qubot-state-space .qubot-folder .qubot-caption{
+    height: 20px;
+    width: 100%;
+    padding: 0px 0px 5px 0px;
+    font-size: 12px;
+    font-weight:  600;
+    text-align: center;
+    background-color:    #f0eee5 !important;
+}   
+
+.qubot-state-space .qubot-folder .qubot-caption:hover{    
+    cursor:             grab;   
+}    
+
+.qubot-state-space .qubot-folder .qubot-content{
+    width:              100%;
+    background-color:   var(--qubot-card-background);        
+    cursor:             pointer; 
+    flex:               1;
+    display:            flex;  
+    flex-direction:     row;
+    align-items:        center;    
+    justify-content:    center
+}
+
+.qubot-state-space .qubot-folder:hover{
+    border:             1px solid red;
+}  
+
+.qubot-folder-active{
+    border:             1px solid var(--qubot-editor-border-color3) !important;
+    border-color:     #DE614D !important;
+    background-color: #f7fff2 !important;;   
+}
+.qubot-state-space .qubot-folder-active .qubot-caption{
+    background-color:    #fdc3ba !important;
+}   
+
+.qubot-state-active{        
+    border-color:     #DE614D !important;
+    background-color: #fce9e6 !important;;   
+}
+
+.qubot-state-link{      
+    border-color:  #208EF0  !important;
+    background-color: #deeffd !important;;    
+}
+
+.qubot-state-link-main{        
+    background-color: greenyellow                !important;
+    box-shadow:         10px 10px 20px #646464b2 !important; 
+}
+
+.qubot-state-space .qubot-state.one-state:hover > .qubot-btn.del { 
+    display: none;
+}
+.qubot-state-space .qubot-state:hover > .qubot-btn { 
+    opacity: var(--qubot-btn-opacity);
+}
+
+
+.qubot-state-space .qubot-state .checkbox{
+    height:             18px;        
+    width:              18px;        
+    position:           absolute;
+    left :              3px;
+    top:               -12px;    
+}    
+.qubot-state-space .qubot-state .checkbox::before{
+    width:  inherit;
+    height: inherit;    
+}
+
+.qubot-state-space .qubot-state .qubot-content{
+    width:              100%;
+    font-size:          8px;
+    line-height:        9px;
+    margin:             16px 5px 0px 5px;
+    background-color: inherit                !important;
+    display:            flex;
+    flex-direction:     column;
+    justify-content:    flex-start;
+    transition:         border 0.3s;
+    cursor:             pointer;
+    overflow-y: auto;
+    overflow-x: visible;
+    max-height: 250px;
+}
+
+.qubot-state-space .qubot-state:hover{
+    border:             2px solid red;
+}    
+.qubot-state-space .qubot-state:active{    
+    box-shadow:         none;
+}    
+
+.qubot-state-space .qubot-state .qubot-content .qubot-message{
+    position:           relative; 
+    border:             1px solid var(--qubot-editor-border-color);
+    border-radius:      0px 10px 10px 10px;
+    background-color: #F3F2F2;
+    margin:             2px;
+    padding: 2px;
+    opacity:            1 !important;
+    min-height:         20px;
+}    
+
+.qubot-state-space .qubot-state .qubot-content .qubot-message .qubot-text{
+    color:              black;
+    padding:            2px;
+    word-wrap:          break-word;
+}
+.qubot-state-space .qubot-state .qubot-content .qubot-message .qubot-text b,
+.qubot-state-space .qubot-state .qubot-content .qubot-message .qubot-text strong { color: black; font-weight: bold;}
+.qubot-state-space .qubot-state .qubot-content .qubot-message .qubot-text .red   { color:  red;}
+.qubot-state-space .qubot-state .qubot-content .qubot-message .qubot-text .green { color:  green; }
+.qubot-state-space .qubot-state .qubot-content .qubot-message .qubot-text .blue  { color:  blue;  }
+.qubot-state-space .qubot-state .qubot-content .qubot-message .qubot-text .blue2 { color:  #069;}
+.qubot-state-space .qubot-state .qubot-content .qubot-message .qubot-text .small { font-size: 12px; }
+
+.qubot-state-space .qubot-state .qubot-content .qubot-message .item-row{
+    margin:             1px;
+    padding: 1px;
+    display:            flex;
+    flex-direction:     row;
+    justify-content:    space-between;
+    flex-wrap:          wrap;
+}
+
+.qubot-state-space .qubot-state .qubot-content .qubot-message .item-row .qubot-button{
+    min-height:        10px !important;
+    font-size:         inherit !important;
+    background-color: white;
+    color:              black;
+    border:             1px solid var(--qubot-editor-border-color);
+    border-radius:      10px;
+    margin: 1px 2px;
+    padding: 0px 5px;
+    /* text-align:         center; */
+    flex:               1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+}
+
+.qubot-state-space .qubot-state .qubot-content .qubot-message .item-images{
+    margin:             1px;
+    padding:            1px;
+    display:            flex;
+    flex-direction:     row;
+    justify-content: space-between;
+    align-items: center;
+}    
+
+.qubot-state-space .qubot-state .qubot-content .qubot-message .item-images .image{
+    margin:             2px;
+    margin-left:        auto;
+    margin-right:       auto;
+    height:             100%;
+    width:              100%;
+}    
+
+
+.qubot-state-space .qubot-state .qubot-content  .item-input{
+    border-color:     #ccc;
+    border-style:       solid;
+    border-width:       1px;    
+    border-radius:      20px;
+    
+    height:             10px;
+    width:              100%;    
+    overflow:           hidden;
+
+    background-color:   white;    
+    display:            flex;
+    align-items:        center;
+    justify-content:    center;
+
+    margin-top: auto;
+}
+
+.qubot-state-space .qubot-state .qubot-content .qubot-message .map{
+    flex:                1;
+    margin:             4px 2px;
+}
+
+.qubot-state-space .qubot-state .qubot-content .qubot-message  .video{
+    background-color:   rgb(211, 211, 253);       
+    font-size:          32px;
+    flex:                1;
+    height:             80px;
+    margin:             4px 2px;
+    display:            flex;
+    align-items:        center;
+    justify-content:    center
+}
+.qubot-state-space .qubot-state .qubot-content .qubot-message  .audio{
+    background-color:   rgb(196, 252, 247);       
+    font-size:          18px;
+    flex:                1;
+    height:             20px;
+    margin:             4px 2px;
+    display:            flex;
+    align-items:        center;
+    justify-content:    center
+}
+
+
+/******************************************************************************
+                                Eddited buttons
+******************************************************************************/
+
+.qubot-btn{
+    width:              20px;
+    height:             20px;    
+    background-color: white;
+    border:             1px solid var(--qubot-editor-border-color3);
+    border-radius:      20px;
+    position:           absolute;
+    display:            flex;
+    flex-direction:     row;
+    align-items:        center;
+    justify-content:    space-evenly;    
+    cursor:             pointer !important;
+    opacity:            0;    
+    transition:         opacity 0.3s;    
+    z-index:            1;
+}
+.qubot-btn:hover{
+    opacity:            1 !important;    
+}
+
+.qubot-icon-add-state{    
+    background:         url(svg/add.svg) no-repeat;
+    background-size:    50px;
+    width:              50px;
+    height:             50px;    
+    opacity:            0.3;
+    box-shadow:         3px 3px 50px gainsboro;
+    filter: invert(0%) sepia(96%) saturate(16%) hue-rotate(246deg) brightness(98%) contrast(105%);
+}
+
+.qubot-icon-folder-closed{    
+    background:         url(svg/folder_closed.svg) no-repeat;
+    background-size:    50px;
+    width:              50px;
+    height:             50px;    
+    filter: brightness(80%);
+}
+
+.qubot-icon-folder-opened{    
+    background:         url(svg/folder_opened.svg) no-repeat;
+    background-size:    50px;
+    width:              50px;
+    height:             50px;    
+    filter: brightness(80%);
+}
+
+.qubot-icon-add{    
+    background:         url(svg/plus.svg) no-repeat;
+    background-size:    14px;
+    width:              14px;
+    height:             14px;    
+    filter: invert(11%) sepia(100%) saturate(5647%) hue-rotate(246deg) brightness(63%) contrast(133%);
+}
+.qubot-icon-add:hover{    
+    filter: invert(32%) sepia(97%) saturate(3544%) hue-rotate(232deg) brightness(103%) contrast(105%);
+}   
+.qubot-icon-add:active{
+    transform:          scale(0.9);
+}   
+
+.qubot-icon-del{    
+    background:         url(svg/close.svg) no-repeat;
+    background-size:    18px;    
+    width:              18px;
+    height:             18px;        
+    filter: invert(11%) sepia(64%) saturate(6643%) hue-rotate(357deg) brightness(88%) contrast(112%);    
+}
+.qubot-icon-del:hover{
+    filter: invert(14%) sepia(71%) saturate(6729%) hue-rotate(358deg) brightness(103%) contrast(120%);
+}   
+.qubot-icon-del:active{
+    transform:          scale(0.9);
+}   
+
+.qubot-icon-up{    
+    background:         url(svg/up.svg) no-repeat;
+    background-size:    10px;
+    width:              10px;
+    height:             10px;    
+    filter:             var(--qubot-svg-color-norm);          
+}
+.qubot-icon-up:hover{
+    filter:             var(--qubot-svg-color-hover);  
+}   
+.qubot-icon-up:active{
+    transform:          scale(0.9);
+}   
+
+.qubot-icon-dn{    
+    background:         url(svg/down.svg) no-repeat;
+    background-size:    10px;
+    width:              10px;
+    height:             10px;    
+    filter:             var(--qubot-svg-color-norm);          
+}
+.qubot-icon-dn:hover{
+    filter:             var(--qubot-svg-color-hover);  
+}   
+.qubot-icon-dn:active{
+    transform:          scale(0.9);
+}   
+
+.qubot-icon-lf{    
+    background:         url(svg/left.svg) no-repeat;
+    background-size:    10px;
+    width:              10px;
+    height:             10px;    
+    filter:             var(--qubot-svg-color-norm);          
+}
+.qubot-icon-lf:hover{
+    filter:             var(--qubot-svg-color-hover);  
+}   
+.qubot-icon-lf:active{
+    transform:          scale(0.9);
+}   
+
+.qubot-icon-rt{    
+    background:         url(svg/right.svg) no-repeat;
+    background-size:    10px;
+    width:              10px;
+    height:             10px;    
+    filter:             var(--qubot-svg-color-norm);          
+}
+.qubot-icon-rt:hover{
+    filter:             var(--qubot-svg-color-hover);  
+}   
+.qubot-icon-rt:active{
+    transform:          scale(0.9);
+}   
+
+.qubot-icon-play-dn{
+    position:           absolute;
+    background:         url(svg/play_dn.svg) no-repeat;
+    margin:             0 5px 0 0;
+    background-size:    10px;
+    width:              10px;
+    height:             10px;    
+    top:                18px;
+    right:              2px;
+    filter:             var(--qubot-svg-color-norm);              
+}
+
+.qubot-icon-run{   
+    background:         url(svg/run01.svg) no-repeat;
+    background-size:    25px;
+    width:              25px;
+    height:             25px;    
+    margin:             0px 10px 0px 0px;
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(216deg) brightness(107%);              
+}
+
+/******************************************************************************
+                                  Drag menu
+******************************************************************************/
+
+.qubot-drag-menu{
+    position: fixed;
+    top: 0;
+    border:            1px solid var(--qubot-editor-border-color);
+    background: rgb(170 170 170);
+    opacity:            0;
+    display:           none;
+    justify-content:   flex-start;
+    align-content:     flex-start;
+    z-index:           11;
+}
+
+.qubot-drag-menu-item{
+    /* top:               0px   !important; */
+    /* right: -30px  !important; */
+    width: 31px  !important;
+    height: 35px;
+    border-radius: 0 .45rem .45rem 0;
+}
+
+.qubot-drag-menu-item:hover{
+    opacity:            1 !important;
+    right:              -66px !important;
+    height: fit-content;
+    width: fit-content !important;
+    border-radius: .45rem;
+}
+
+.qubot-drag-menu-action{
+    width: 31px  !important;
+    height: 35px;
+    border-radius: 0 .45rem .45rem 0;
+}
+
+.qubot-drag-menu-action:hover{
+    opacity:            1 !important;
+    right:              -66px !important;
+    height: fit-content;
+    width: fit-content !important;
+    border-radius: .45rem;
+}
+.qubot-drag-menu-intent{
+    /* top:               0px !important; */
+    right:             -35px  !important;
+    width:             38px  !important;
+}
+
+.qubot-drag-menu-intent:hover{
+    opacity:            1 !important;
+    right:              -60px !important;
+    height:             none !important;
+    width: fit-content !important;
+}
+.qubot-icon {
+    background-position: center;
+    background-size:    25px;
+    background-repeat: no-repeat;
+    width: 30px;
+    height: 35px;
+    cursor: pointer;
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(216deg) brightness(107%);
+}
+.qubot-icon:hover {
+    filter: invert(14%) sepia(71%) saturate(6729%) hue-rotate(358deg) brightness(103%) contrast(120%);
+}
+.qubot-icon:active{
+    transform:  scale(0.9);
+}  
+.qubot-icon-drag{
+    background-image:   url(svg/drag.svg);
+    cursor:             grab;
+}
+.qubot-icon-drag-btn{
+    position:           absolute;
+    background:         url(svg/drag.svg) no-repeat;
+    background-size:    25px;
+    width:              25px;
+    height:             25px;
+    margin:             5px 3px;
+    cursor:             grab;
+    top:                2px;
+    left: -1px;
+    opacity:            0.3;
+}
+.qubot-icon-drag-btn:hover{
+    opacity:            0.8;
+}
+.qubot-btn-plus{
+    width: 30px;
+    height: 30px;
+}
+.qubot-icon-plus{
+    background-image:         url(svg/plus01.svg);
+    background-repeat: no-repeat;
+    background-size: 25px;
+    background-position: center;
+    width: 30px;
+    height: 35px;
+    cursor: pointer;
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(216deg) brightness(107%);
+}
+.qubot-icon-plus:hover{
+    filter: invert(14%) sepia(71%) saturate(6729%) hue-rotate(358deg) brightness(103%) contrast(120%);   
+}
+.qubot-icon-plus:active{
+    transform:          scale(0.9);
+}   
+
+.qubot-icon-trash {
+    background-image: url(svg/trash01.svg);
+} 
+
+.qubot-icon-copy{
+    background-image:   url(svg/copy.svg);
+}
+
+.qubot-icon-paste{
+    background-image:   url(svg/paste.svg);
+}
+
+/******************************************************************************
+                             Menu on btn +
+******************************************************************************/
+
+/*
+.qubot-menu{
+    filter:             none;
+    border:             1px solid  black;
+    background-color: white;
+    color:            black;
+    font-family:        var(--qudata-editor-font-family);
+    font-size:          18px;
+    width:              225px;
+    position:           absolute;
+    top:               -1px;
+    left:              -1px;
+    overflow:           hidden;
+    display:            none;
+    flex-direction:     row;
+    flex-wrap:          wrap;
+    z-index:            100;
+}    */
+.qubot-menu {
+    filter:             none;
+    font-family:        var(--qudata-editor-font-family);
+    font-size:          18px;
+    position: absolute;
+    top: -5px;
+    left: -1px;
+    display: none;
+    /* margin-bottom: 12px; */
+    border-style: solid;
+    border-width: 2px;
+    border-color: rgb(223,223,223);
+    min-height: 80px;
+    /* width: 350px; */
+    max-width: 350px;
+    border-radius: .45rem;
+    overflow: hidden;
+    flex-wrap: wrap;
+    background-color: white;
+    z-index:            100;
+}
+
+.qubot-menu-container {
+    height: 100%;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+}
+
+.qubot-menu .a, .qubot-menu .a-disabled {
+    width:              70px;
+    height:             30px;
+    float:              left;
+    color:              black;
+    padding:            0px 0px 0px 5px;
+    cursor:             pointer;
+    display:            flex;
+    flex-direction:     row;
+    align-content:      center
+}
+
+.qubot-menu .a:hover {    
+    background-color:  rgb(234, 236, 235) ; 
+}
+
+.qubot-menu .a-disabled {    
+    color:             rgb(234, 236, 235);
+    background-color:  white; 
+    cursor:default;   
+}
+
+.qubot-menu-item {
+    width: 25%;
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    cursor: pointer;
+    min-width: 80px;
+}
+.qubot-menu-item:not(.disabled):hover {
+    background-color: rgb(245,245,245);
+}
+
+.qubot-menu-item.disabled {
+    filter: opacity(0.3);
+    cursor: default;
+}
+
+/******************************************************************************
+                            Slots Menu 
+******************************************************************************/
+
+.qubot-slots-menu{       
+    filter:             none;        
+    border:             1px solid  black;    
+    background-color: white;  
+    color:            black;     
+    font-family:        var(--qudata-editor-font-family);
+    font-size:          18px;    
+    min-width:          100px;
+    position:           absolute;        
+    top:               -1px;
+    left:              -1px;
+    overflow:           hidden;
+    
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    
+    /*
+    display:            flex;    
+    flex-direction:     row;
+    flex-wrap:          wrap;
+    */
+    z-index:            100;        
+    
+}    
+.qubot-slots-menu .a, .qubot-slots-menu .a-sys{    
+    /* border:       0.5px solid black;    */
+    
+    float:              left;
+    color:              black;        
+    padding:            0px 5px;
+    cursor:             pointer;   
+    display:            flex;
+    flex-direction:     row;
+    align-content:      center    
+}
+.qubot-slots-menu .a-sys{
+    color:              blue;        
+}
+
+.qubot-slots-menu .a:hover, .qubot-slots-menu .a-sys:hover {    
+    background-color:  rgb(234, 236, 235) ; 
+}
+
+/******************************************************************************
+                                  Grid row menu
+******************************************************************************/
+
+.qubot-grid-row-menu{
+    position:          absolute;
+    border:            1px solid var(--qubot-editor-border-color);
+    background:      rgb(170, 170, 170);
+    border-radius:     1px;
+    /* width:             18px; */
+    /* height:            45px; */
+    opacity:            0.3;
+    display:           flex;
+    flex-direction:   column;
+    justify-content:   flex-start;
+    align-content:     flex-start;
+    z-index:           10;
+    padding: 2px;
+}
+
+.qubot-grid-row-menu:hover{
+    opacity:            1 !important;    
+    
+    opacity:            1;         
+}
+.qubot-grid-col-menu{
+    position:          absolute;
+    border:            1px solid var(--qubot-editor-border-color);
+    background:      rgb(170, 170, 170);
+    border-radius:     1px;
+    opacity:            0.3;
+    display:           flex;
+    flex-direction:     row;
+    align-items: center;
+    z-index:           10;
+    padding-bottom: 2px;
+    padding-right: 2px;
+}
+
+.qubot-grid-col-menu:hover{
+    opacity:            1 !important;    
+    
+    opacity:            1;         
+}
+
+.qubot-icon-drag-row{   
+    background:         url(svg/drag.svg) no-repeat;   
+    background-size:    18px;
+    width:              18px;
+    height:             18px;        
+    margin-top:         2px;
+    cursor:             grab;  
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(216deg) brightness(107%);              
+}
+.qubot-icon-drag-row:hover{   
+    filter: invert(14%) sepia(71%) saturate(6729%) hue-rotate(358deg) brightness(103%) contrast(120%);
+}
+.qubot-btn-plus-row{
+    /* width:              16px; */
+    /* height:             16px; */
+}
+.qubot-icon-plus-row{   
+    background:         url(svg/plus01.svg) no-repeat;
+    background-size:    18px;
+    margin-top:         5px;
+    width:              18px;
+    height:             18px;        
+    cursor:             pointer;    
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(216deg) brightness(107%);              
+}
+.qubot-icon-plus-row:hover{
+    filter: invert(14%) sepia(71%) saturate(6729%) hue-rotate(358deg) brightness(103%) contrast(120%);   
+}
+
+.qubot-icon-plus-row-add{
+    background: url('svg/editor/plus.svg') no-repeat;
+    background-size: 100%;
+    width: 25px;
+    height: 25px;
+    margin: 8px;
+}
+
+.qubot-icon-upload_{
+    background:         url(svg/upload2.svg) no-repeat;
+    margin-top: 15px;
+    background-size: 20px;
+    background-position: center;
+    width: 25px;
+    height: 100%;
+}
+
+.qubot-icon-upload{   
+    background:         url(svg/upload.svg) no-repeat;   
+    margin-top:         20px;
+    background-size:    64px;
+    width:              64px;
+    height:             64px;                    
+}
+
+/******************************************************************************
+                                      Help
+******************************************************************************/
+
+/* The Modal (background) */
+.qubot-modal {
+    position:           fixed !important;
+    font-size:          18px;
+    line-height:        22px;
+    font-family:        '-apple-system', 'BlinkMacSystemFont',   "San Francisco", "Segoe UI", Arial, sans-serif;
+    display:            none; /* Hidden by default */
+    position:           absolute; /* Stay in place */
+    z-index:            1000; /* Sit on top */
+    /* padding-top:        100px; */ /* Location of the box */
+    left:               0;
+    top:                0;
+    width:              100%; /* Full width */
+    height:             100%; /* Full height */
+    overflow:           auto; /* Enable scroll if needed */
+    background-color:   rgb(0,0,0); /* Fallback color */
+    background-color:   rgba(0,0,0,0.4); /* Black w/ opacity */
+    display:            flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+/* Modal Content */
+.qubot-modal-header {
+    background-color:   #fefefe;
+    /* margin:             auto; */
+    padding: 1rem;
+    /* height:             20px; */
+    /* width:              600px; */
+    display:            flex;
+    flex-direction:     row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #dee6ed;
+}
+
+
+/* Modal Content */
+.qubot-modal-content {
+    font-size:         18px !important;
+    line-height:       20px !important;
+    background-color:   #fefefe;
+    margin:             auto;
+    padding: 0px 0 5px 0 !important;
+    /* width:              600px; */
+}
+
+.qubot-modal-content ol{
+    margin:          10px 0px 10px 36px;
+    padding:         0;
+}
+.qubot-modal-content ol li{
+    margin:          0px 0px 10px 0px;
+}
+.qubot-modal-content ul{    
+    margin:          10px 0px 10px 36px;
+    padding:         0;
+}
+.qubot-modal-content ul li{
+    list-style-type: disc;
+    margin:          0px 0px 10px 0px;
+}
+
+.qubot-modal-content p{
+    color: #6c757d;
+    font-size: 17px;
+    cursor: default;
+}
+
+/* The Close Button */
+.qubot-modal-header .qubot-modal-close {
+    font-size:          32px;
+    line-height:        26px;
+    color:            #aaaaaa;
+    /* float:              right; */
+    font-weight:        bold;
+}
+.qubot-modal-header .qubot-modal-close:hover{
+    color:              red;
+}
+
+.qubot-modal-content .qubot-modal-block{
+    display:            flex;
+    flex-direction:     row;
+    justify-content:    center;
+    padding: 0 20px;
+    text-align: center;
+}
+.qubot-modal-window.start-info .qubot-modal-content .qubot-modal-block{
+    text-align: justify;
+}
+.qubot-modal-content .qubot-modal-block:last-child {
+    border-top: 1px solid #dee6ed;
+    justify-content: flex-end;
+    padding: 0.25rem;
+}
+
+.qubot-modal-content .qubot-modal-block:last-child * {
+    margin: 0.25rem;
+}
+
+.qubot-modal-content .qubot-modal-block .qubot-modal-button{
+    border:             2px solid var(--qubot-editor-border-color3);
+    border-radius:      10px;    
+    width:              150px;
+    height:             40px;
+    margin:             10px;
+    cursor:             pointer;
+    display:            flex;
+    flex-direction:     row;
+    justify-content:    center;
+    align-items:        center;
+}
+.qubot-modal-content .qubot-modal-block .qubot-modal-button:hover{
+    border: 2px solid red;
+}
+
+.qubot-modal-close:hover {
+    color:           #000;
+    text-decoration:   none;
+    cursor:            pointer;
+}
+
+.qubot-modal .qubot-modal-footer{
+    display:            flex;
+    flex-direction:     row;
+    justify-content:    flex-end;
+    align-items:        center;
+    padding: 0 2px 4px 0;
+}
+.qubot-modal .qubot-modal-footer .label{
+    font-size: 12px;
+}
+.qubot-hint{    
+    font-size:          18px;
+    line-height:        22px;
+    font-family:        '-apple-system', 'BlinkMacSystemFont',   "San Francisco", "Segoe UI", Arial, sans-serif;
+
+    display:            none;
+    position:           absolute;
+    left:              10px;
+    width:              300px;    
+    margin:             5px;
+    padding:            10px 20px;        
+    border:             1px solid  black;    
+    border-radius:      0px 20px 20px 20px;
+    background-color: white;            
+    font-size:          18px; 
+    opacity:             0.95;
+    z-index:             90;
+
+    transition:         opacity 0.3s;    
+}
+.qubot-hint p{
+    margin: 10px 0px; 
+    font-size: inherit;
+}
+
+.qubot-import-input{
+    border: 2px solid rgba(96, 96, 96, 0.432);
+    border-radius:      10px;
+    min-width:          200px;
+    height:             200px;
+    margin:             10px;
+    padding:            10px;
+    cursor:             pointer;
+    display:            flex;
+    flex-direction:     column;
+    justify-content:    center;
+    align-items:        center;
+    color: #6c757d;
+    margin-bottom: 30px;
+}
+.qubot-import-input:hover{
+    border: 2px solid red;
+}
+
+.qubot-import-drop-area{
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.qubot-ctx-menu button svg {
+    padding: 0 6px 0 0;
+    margin: 0;
+    color: rgb(94, 94, 94);
+    width: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.qubot-ctx-menu button {
+    border-style: none;
+    padding: 10px 12px;
+    background-color: white;
+    transition-duration: .2s;
+}
+.qubot-ctx-menu button:hover {
+    background-color: rgb(225, 225, 225);
+}
+.qubot-ctx-menu button:active {
+    background-color: rgb(200, 200, 200);
+}
+
+.qubot-ctx-menu {
+    display: flex; 
+    flex-direction: column; 
+    overflow: hidden;
+    background-color: white; 
+    border-radius: .25rem;
+    box-shadow: 3px 3px 11px gray;
+    position: absolute;
+    z-index: 10;
+}  
+.qubot-ctx-menu hr {
+    margin: 0;
+    height: 1px;
+    border-style: none;
+    background-color: lightgray;
+}
+
+.qubot-flex-line {
+    display: flex;
+    align-items: center;
+}
+.qubot-ctx-menu .qubot-flex-line:last-child span {
+    text-align: center;
+}
+.qubot-flex-line span {
+    text-align: left;
+    width: 100%;
+    padding-left: 5px;
+}
+
+.qubot-ctx-dropdown-content {
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: white; 
+    border-radius: .25rem;
+    box-shadow: 3px 3px 11px gray;
+    position: fixed;
+}
+.qubot-ctx-dropdown-content:hover {
+    display: flex;
+}
+
+.qubot-ctx-dropdown-content button:hover {background-color: #ddd;}
+
+.qubot-ctx-dropdown:hover + .qubot-ctx-dropdown-content {display: flex;}
+
+.qubot-ctx-menu-svg {
+    background-size: contain !important;
+    width: 24px;
+    height: 24px;
+    opacity: 0.7;
+    margin-right: 5px;
+}
+
+#qubot-ctx-menu-svg-addStep                                     { background: url(svg/menu04.svg) no-repeat; }
+#qubot-ctx-menu-svg-addFolder                                   { background: url(svg/add-folder.svg) no-repeat; }
+#qubot-ctx-menu-svg-paste, #qubot-ctx-menu-svg-pasteFolder      { background: url(svg/paste.svg) no-repeat; }
+#qubot-ctx-menu-svg-copy, #qubot-ctx-menu-svg-copyFolder        { background: url(svg/copy.svg) no-repeat; }
+#qubot-ctx-menu-svg-incr                                        { background: url(svg/zoom-in.svg) no-repeat; }
+#qubot-ctx-menu-svg-decr                                        { background: url(svg/zoom_out.svg) no-repeat; }
+#qubot-ctx-menu-svg-delete                                      { background: url(svg/delete.svg) no-repeat; }
+#qubot-ctx-menu-svg-step                                        { background: url(svg/step.svg) no-repeat; }
+#qubot-ctx-menu-svg-template                                    { background: url(svg/template.svg) no-repeat; }
+#qubot-ctx-menu-svg-plugin                                      { background: url(svg/plugin.svg) no-repeat; }
+
+.cont-input-url {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 5px;
+    width: 100%;
+}
+
+
+.qubot-card {
+    border-radius: .45rem;
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 2px solid rgba(0,0,0,.125);
+}
+
+
+.qubot-list-group-item {
+    border-style: none;
+    position: relative;
+    display: block;
+    padding: .5rem 1rem;
+    background-color: #fff;
+    width: 100%;
+}
+.qubot-list-group-item:hover {
+    background-color: #f4f7f9;
+}
+.qubot-caption .qubot-list-group-item {
+    border-radius: 0;
+    color: #6c757d;
+    font-size: 16px;
+}
+.qubot-caption>.qubot-list-group-item:first-child {
+    border-radius: .45rem 0 0 .45rem;
+    border-style: none;
+}
+.qubot-caption>input.qubot-list-group-item:first-child {
+    margin-right: 2px;
+}
+.qubot-caption>.qubot-list-group-item:last-child {
+    border-radius: 0 .45rem .45rem 0;
+    border-style: none;
+}
+.qubot-list-group-item.btn-lang {
+    border-style: none solid;
+    width: 70px;
+    height: 100%;
+    border-width: 1px;
+    border-color: rgb(223 223 223);
+    font-size: 20px;
+}
+
+input[type="checkbox"].qudata-checkbox {
+    display: none;
+    width: 40px;
+    height: 100%;
+}
+.qubot-check {
+    margin: 0;
+    padding: 6px;
+    display: flex;
+    width: auto;
+}
+
+input[type="checkbox"]+label.qudata-checkbox {
+    border-style: solid;
+    width: 35px;
+    height: 35px;
+    min-width: 35px;
+    margin: 0;
+    border-radius: .25rem;
+    border-color: rgb(191, 191, 191);
+    border-width: 2px;
+    /* background-color: var(--background-color); */
+}
+    input[type="checkbox"]:not([disabled])+label.qudata-checkbox:hover {
+        filter: brightness(0.85);
+    }
+    
+input[type="checkbox"]+label.qudata-checkbox.small {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+}
+
+label.qudata-checkbox+label {
+    margin: -3px 10px 0 6px;
+    display: flex;
+    color: grey;
+}
+input[type="checkbox"]:checked+label.qudata-checkbox {
+    background-color: #3F80EA;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
+}
+
+.qubot-lang-popup {
+    border-radius: 0 0 .45rem .45rem;
+    border-style: none solid solid solid;
+    transition-duration: var(--anim-duration-slow);
+    opacity: 0;
+    left: 100000%;
+    transition-property: opacity;
+    position: absolute;
+    width: 66px;
+    min-width: 100%;
+    overflow: hidden;
+    margin-left: 0px;
+}
+
+.btn-lang:hover+.qubot-lang-popup,
+.qubot-lang-popup:hover {
+    left: auto;
+    opacity: 1;
+    border-top: solid;
+    border-top-width: 1px;
+    border-top-color: #eeeeee;
+}
+
+.qubot-list-group-item.active {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.qubot-lang-popup .qubot-list-group-item {
+    width: auto;
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+}
+
+.qubot-modal-window {
+    
+box-shadow: 3px 3px 11px grey;
+    
+width: fit-content;
+    
+height: fit-content;
+    
+border-radius: .3rem;
+    
+overflow: hidden;
+    
+overflow-y: auto;
+    
+max-height: 90vh;
+}
+
+.qubot-modal-window.qudata-alert {
+
+width: 400px;
+}
+.qubot-modal-window.qudata-alert.no-borders .qubot-modal-header {
+
+border: none;
+
+font-size: 17px;
+}
+.qubot-modal-window.qudata-alert.no-borders {
+    
+width: 350px;
+}
+.qubot-modal-window.qudata-alert.no-borders .qubot-modal-footer {
+
+    }
+.qubot-modal-window.start-info {
+
+}
+.qubot-modal-title {
+    color:#6c757d
+;
+    cursor: default;
+}
+
+.bootstrap-btn {
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.625;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: 0.25rem 0.7rem;
+    font-size: 0.825rem;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.bootstrap-btn-primary:not(:disabled):hover {
+    color: #fff;
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+.bootstrap-btn-primary:not(:disabled) {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+.bootstrap-btn-secondary {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+.bootstrap-btn-secondary:hover {
+    color: #fff;
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+.bootstrap-btn:disabled {
+    cursor: default;
+}
+
+.bootstrap-btn-danger:not(:disabled) {
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #d9534f;
+}
+.bootstrap-btn-danger:not(:disabled):hover {
+    color: #fff;
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+.qudata-form-control {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.7rem;
+    font-size: 0.825rem;
+    font-weight: 400;
+    line-height: 1.625;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    margin-bottom: 12px;
+}
+
+.qubot-modal-window .qubot-modal-content .qubot-modal-block p {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.qudata-scroll {
+    width: 20px;
+    height: 100%;
+    position: relative;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -khtml-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+}
+
+.qudata-scroll .qudata-scroll-item {
+    background-color: gray;
+    width: 100%;
+    height: 40px;
+    position: absolute;
+}
+
+.qubot-editor-content {
+    overflow-y: scroll;
+    height: 100%;
+}
+
+.qubot-select-lang {
+    
+position: relative;
+
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+.qubot-set-btn {
+    
+background-position: center;
+    
+background-repeat: no-repeat;
+    
+width: 32px;
+    
+cursor: pointer;
+}
+.qubot-set-btn:hover {
+    background-color: rgb(223,223,223);
+}
+.qubot-set-btn.on {background-color: var(--background-hover);}
+
+.button-icon {
+    height: 100%;
+    margin: 0 6px;
+}
+
+/********************************************************
+**** svg styles 
+*********************************************************/
+.qudata-svg {
+    height: 25px;
+    width: 25px;
+    background-position: center;
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    margin: 8px;
+}
+.qudata-svg-text {
+    background-image: url('svg/editor/elems/text.svg');
+}
+.qudata-svg-buttons {
+    background-image: url('svg/editor/elems/buttons.svg');
+}
+.qudata-svg-image {
+    background-image: url('svg/editor/elems/image.svg');
+}
+.qudata-svg-gallery {
+    background-image: url('svg/editor/elems/image.svg');
+}
+.qudata-svg-actions {
+    background-image: url('svg/editor/elems/actions.svg');
+}
+.qudata-svg-timer {
+    background-image: url('svg/editor/elems/timer.svg');
+}
+.qudata-svg-timer-badge {
+    position: absolute;
+    right:  2px;
+    width: 15px;
+    height: 15px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url('svg/editor/elems/timer.svg');
+}
+.qudata-svg-block {
+    background-image: url('svg/editor/elems/block.svg');
+}
+.qudata-svg-map {
+    background-image: url('svg/editor/elems/map.svg');
+}
+.qudata-svg-video {
+    background-image: url('svg/editor/elems/video.svg');
+}
+.qudata-svg-audio {
+    background-image: url('svg/editor/elems/audio.svg');
+}
+.qudata-svg-nlu {
+    background-image: url('svg/editor/elems/nlu.svg');
+}
+.qudata-svg-note {
+    background-image: url('svg/editor/elems/note.svg');
+}
+
+.qudata-svg-step {
+    background-image: url('svg/editor/props/step.svg');
+}
+.qudata-svg-run {
+    background-image: url('svg/editor/props/run.svg');
+}
+.qudata-svg-goto {
+    background-image: url('svg/editor/props/goto.svg');
+}
+.qudata-svg-slot {
+    background-image: url('svg/editor/props/slot.svg');
+}
+.qudata-svg-script {
+    background-image: url('svg/editor/props/script.svg');
+}
+.qudata-svg-if {
+    background-image: url('svg/editor/props/if.svg');
+}
+.qudata-svg-else {
+    background-image: url('svg/editor/props/if-else.svg');
+}
+.qudata-svg-elif {
+    background-image: url('svg/editor/props/if-elif.svg');
+}
+.qudata-svg-clear {
+    background-image: url('svg/editor/props/clear.svg');
+}
+.qudata-svg-switch {
+    background-image: url('svg/editor/props/switch.svg');
+}
+.qudata-svg-case {
+    background-image: url('svg/editor/props/sw-case.svg');
+}
+.qudata-svg-default {
+    background-image: url('svg/editor/props/sw-default.svg');
+}
+.qudata-svg-load {
+    background-image: url('svg/editor/props/load.svg');
+}
+.qudata-svg-save {
+    background-image: url('svg/editor/props/save.svg');
+}
+.qudata-svg-operator {
+    background-image: url('svg/editor/props/operator.svg');
+}
+.qudata-svg-model {
+    background-image: url('svg/editor/props/activity.svg');
+}
+.qudata-svg-event {
+    background-image: url('svg/editor/props/event.svg');
+}
+.qudata-svg-zap {
+    background-image: url('svg/editor/zap.svg');
+}
+
+.qubot-svg-text {
+    background-image: url('svg/editor/controls/text.svg');
+}
+.qubot-svg-chat-gpt {
+    background-image: url('svg/editor/icons/chat_gpt.svg');
+    background-size: 94%;
+    opacity: 0.7;
+}
+.qubot-svg-mail {
+    background-image: url('svg/editor/controls/mail.svg');
+}
+.qubot-svg-ch-down {
+    background-image: url('svg/editor/controls/chevron_down.svg');
+    transform: rotate(0deg);
+    transition-duration: .2s;
+}
+.qubot-svg-ch-up {
+    transform: rotate(-180deg);
+}
+
+.qubot-svg-calendar {
+    background-image: url('svg/editor/icons/calendar.svg');
+    background-size: 90%;
+}
+.qubot-svg-clock {
+    background-image: url('svg/editor/icons/clock.svg');
+    background-size: 90%;
+}
+
+.qudata-svg-drag {
+    background-image: url('svg/editor/drag.svg');
+}
+.qudata-svg-clone {
+    background-image: url('svg/editor/clone.svg');
+}
+.qudata-svg-copy {
+    background-image: url('svg/editor/copy.svg');
+}
+.qudata-svg-remove {
+    background-image: url('svg/editor/remove.svg');
+}
+.qudata-svg-upload {
+    background-image: url('svg/editor/upload.svg');
+}
+.qudata-svg-add {
+    background-image: url('svg/editor/plus.svg');
+}
+.qudata-svg-paste {
+    background-image: url('svg/editor/paste.svg');
+    /* background-size: 70% !important; */
+}
+/********************************************************
+**** new editor [left panel]
+*********************************************************/
+
+.qubot-item {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    align-items: center;
+    overflow: hidden;
+    width: 100%;
+    padding: 4px 0;
+}
+
+    .qubot-message>.qubot-item,
+    #qubot-actions>.qubot-item {
+        /* padding: 4px 0; */
+    }
+
+    .qubot-item .drag {
+        background-size: 25px;
+        width: 0;
+        min-width: 0;
+        height: 40px;
+        margin: 0;
+        transition-duration: var(--anim-duration-slow);
+        transition-delay: var(--anim-duration);
+        cursor: grab;
+        opacity: 0;
+        background-position: left center;
+    }
+        .qubot-item .drag:hover {
+            filter: contrast(5);
+        }
+    
+    /*.qubot-item:hover>.drag,*/
+    .qubot-item.active>.drag {
+        min-width: 25px;
+        width: 25px;
+        opacity: 1;
+    }
+
+    .qubot-item .qubot-items-content {
+        width: 100%;
+        border-style: dashed;
+        border-width: 1px;
+        border-color: #c5c5c5;
+        border-radius: .45rem;
+        display: flex;
+        flex-direction: row;
+        transition-duration: var(--anim-duration);
+        background-color: var(--console-menu-color);
+        position: relative;
+        overflow: hidden;
+    }
+    .qubot-item.active .qubot-items-content {
+        border-color: var(--qubot-editor-selectid-color);
+    }
+
+    .qubot-item.active .qubot-items-content {
+        border-color: var(--active-clr);
+        border-style: solid;
+    }
+    .qubot-item:not(.active):hover>.qubot-items-content {
+        border-color: var(--hover-clr);
+        border-style: solid;
+    }
+
+        .qubot-item .qubot-items-content input,
+        .qubot-item .qubot-items-content select {
+            width: 100%;
+            border: none;
+            padding: 8px 10px;
+            outline: none;
+            line-height: unset;
+            font-size: 12px;
+            min-height: 40px;
+        }
+
+        .qubot-item .qubot-items-content .controls .qudata-svg {
+            height: 100%;
+            width: 32px;
+            max-width: 32px;
+            border-radius: 0;
+        }
+    
+        .qubot-item .qubot-items-content .controls .qudata-svg:last-child {
+            border-radius: 0 .45rem .45rem 0;
+        }
+    
+        /*.qubot-item:not(.images):not(.buttons):hover .qubot-items-content .controls,*/
+        .qubot-item:not(.images):not(.buttons).active .qubot-items-content .controls {
+            min-width: fit-content;
+            flex-direction: revert;
+        }
+    
+        /*.qubot-item:hover .qubot-items-content .controls .qudata-svg,*/
+        .qubot-item.active .qubot-items-content .controls .qudata-svg {
+            opacity: 1;
+        }
+    
+        /*.qubot-item:hover .qubot-items-content .controls .qudata-svg:active,
+        .qubot-item:hover .qubot-items-content .controls .qudata-svg:focus {
+            background-size: 22px;
+            transform: none;
+        }*/
+
+    .qubot-item .controls {
+        width: 0;
+        min-width: 0;
+        margin: 0;
+        transition-duration: var(--anim-duration-slow);
+        transition-delay: var(--anim-duration);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+        .qubot-item .controls .qudata-svg {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            cursor: pointer;
+            border-radius: .45rem;
+            margin: 0;
+            background-size: 25px;
+            opacity: 0;
+            transition-duration: var(--anim-duration-slow);
+            height: 35px;
+        }
+        
+            .qubot-item .controls .qudata-svg:hover {
+                background-color: var(--background-hover);
+            }
+
+            .qubot-item .controls .qudata-svg:active,
+            .qubot-item .controls .qudata-svg:focus {
+                transform: scale(0.9);
+            }
+
+        /*.qubot-item:hover>.controls .qudata-svg,*/
+        .qubot-item.active>.controls .qudata-svg {
+            opacity: 1;
+            width: 100%;
+        }
+    
+    /*.qubot-item:hover>.controls,*/
+    .qubot-item.active>.controls {
+        width: 45px;
+        padding: 0 0 0 4px;
+    }
+
+.qubot-item.note {
+    align-items: flex-start;
+}
+    .qubot-item.note .qubot-items-content textarea {
+        height: 100%;
+        border-radius: 0 0 var(--border-rad) var(--border-rad);
+        background-color: rgb(253, 245, 232);
+        border-style: none;
+        min-height: 70px;
+        font-size: 14px;
+    }
+        .qubot-item.note.active .qubot-items-content textarea {
+            overflow: auto;
+        }
+        .qubot-item.note .qubot-items-content textarea:first-child {
+            border-radius: var(--border-rad);
+        }
+
+.qubot-item.text {
+    align-items: flex-start;
+}
+    .qubot-item.text .qubot-items-content textarea {
+        width: 100%;
+        border-style: none;
+        border-radius: 0 0 var(--border-rad) var(--border-rad);
+        min-height: 70px;
+        overflow: hidden;
+        font-size: 14px;
+        line-height: unset;
+    }
+        .qubot-item.text.active .qubot-items-content textarea {
+            overflow: auto;
+        }
+        .qubot-item.text .qubot-items-content textarea:first-child {
+            border-radius: var(--border-rad);
+        }
+
+.qubot-item.action-item {
+    align-items: center;
+}
+    .qubot-item.action-item .qubot-items-content {
+        flex-direction: row;
+        justify-content: space-between;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .qubot-item.action-item .qubot-items-content .icon {
+        width: 100%;
+        background-size: 24px;
+        background-position-x: calc(50%);
+    }
+        /*.qubot-item.action-item:hover .qubot-items-content .icon,*/
+        .qubot-item.action-item.active .qubot-items-content .icon:not(.single) {
+            background-position-x: calc(50% + 16px);
+        }
+
+
+.qubot-item.media-map {
+
+}
+    .qubot-item.media-map .notice .qudata-svg {
+        margin: 0 4px;
+        background-position: center;
+        height: 100%;
+        width: 22px;
+    }
+
+    .qubot-item.media-map .qubot-items-content input {
+        border-radius: 0 .45rem .45rem 0;
+    }
+        .qubot-item.media-map:hover .qubot-items-content input,
+        .qubot-item.media-map.active .qubot-items-content input {
+            border-radius: 0;
+        }
+
+.qubot-item.media {
+}
+    .qubot-item.media .notice .qudata-svg {
+        margin: 0 4px;
+        background-position: center;
+        height: 100%;
+        width: 22px;
+    }
+
+    .qubot-item.media .qubot-items-content input {
+        border-radius: 0 .45rem .45rem 0;
+    }
+        .qubot-item.media:hover .qubot-items-content input,
+        .qubot-item.media.active .qubot-items-content input {
+            border-radius: 0;
+        }
+
+.qubot-line {
+    height: 10px;
+    margin: 0px -15px 0px 0px;
+    transition-duration: var(--anim-duration-slow);
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.qubot-control-panel {
+    border-style: solid;
+    border-color: var(--background-hover);
+    border-width: 1px;
+    height: 30px;
+    width: 30px;
+    z-index: 10;
+    border-radius: 100%;
+    background-color: var(--background-color);
+    margin: 0;
+    background-size: 75%;
+    box-shadow: 0px 0px 2px lightgray;
+    cursor: pointer;
+    position: absolute;
+    right: -5px;
+    /* z-index: 10000000; */
+}
+    .qubot-control-panel:hover {
+        background-color: var(--border-color);
+    }
+
+    .qubot-add-paste {
+        background-color: var(--background-color);
+    }
+
+    .qubot-control-panel {
+        right: -5px;
+    }
+
+.qubot-add-menu {
+    display: flex;
+    width: fit-content;
+    height: 32px;
+    width: 32px;
+    overflow: hidden;
+    border-radius: .45rem;
+    position: absolute;
+    z-index: 10;
+    opacity: 0;
+    top: -1000px;
+    transition-property: opacity;
+    /* transition-duration: var(--anim-duration-slow); */
+    background-color: var(--background-color);
+}
+    .qubot-add-menu:hover {
+        /* opacity: 1; */
+        display: none;
+        width: 64px;
+    }
+    .qubot-add-menu .qudata-svg {
+        border-radius: 0;
+        margin: 0;
+        width: 50%;
+        height: 100%;
+        cursor: pointer;
+        background-size: 85%;
+        min-width: 32px;
+        position: relative;
+    }
+        .qubot-add-menu .qudata-svg:hover,
+        .qubot-add-menu .qudata-svg:first-child:hover {
+            background-color: var(--background-hover);
+        }
+
+        .qubot-add-menu .qudata-svg:first-child {
+            border-style: solid none;
+            border-radius: .45rem;
+            border-width: 2px;
+            border-color: #007bff;
+            background-color: var(--background-color);
+        }
+        
+        .qubot-add-menu:hover .qudata-svg:first-child {
+            border-style: solid none solid solid;
+            border-radius: .45rem 0 0 .45rem;
+            border-width: 2px;
+            border-color: #007bff;
+        }
+
+        .qubot-add-menu .qudata-svg:last-child {
+            border-top: solid;
+            border-right: solid;
+            border-bottom: solid;
+            border-radius: 0 .45rem .45rem 0;
+            border-color: #007bff;
+            border-width: 2px;
+        }
+
+.qubot-item.images {
+    align-items: flex-start;
+}
+    .qubot-item.images>.qubot-items-content {
+        padding: 6px;
+        min-height: 70px;
+        align-items: center;
+    }
+        .qubot-item.images:hover .qubot-items-content,
+        .qubot-item.images.active .qubot-items-content {
+            border-style: dashed;
+            border-color: #c5c5c5;
+        }
+            /*.qubot-item.images .qubot-item:hover .qubot-items-content,*/
+            .qubot-item.images .qubot-item.active .qubot-items-content {
+                border-style: solid;
+                border-color: var(--active-clr);
+            }
+            .qubot-item.images .qubot-item:not(.active):hover .qubot-items-content {
+                border-style: solid;
+                border-color: var(--hover-clr);
+            }
+    
+    .qubot-item.images>.qubot-items-content .images {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .qubot-item.images .image {
+        width: 100%;
+        display: flex;
+        min-height: 48px;
+        margin-bottom: 6px;
+    }
+        .qubot-item.images .images .qubot-item {
+            margin: 4px 0;
+            padding: 0;
+        }
+
+    .qubot-item .qubot-add-button {
+        cursor: pointer;
+        /* border-style: dashed; */
+        /* border-radius: .45rem; */
+        /* border-width: 1px; */
+        /* border-color: #c5c5c5; */
+    }
+        .qubot-item.images .qubot-item.qubot-add-button:hover .qubot-items-content {
+            border-style: dashed;
+            background-color: var(--hover-btn-clr);
+        }
+
+        .qubot-item .qubot-add-button .qubot-items-content {
+            justify-content: center;
+        }
+    .qubot-item.images .qubot-item .qubot-items-content .controls {
+        flex-direction: row;
+    }
+    /*.qubot-item.images .qubot-item:hover>.qubot-items-content .controls, */
+    .qubot-item.images .qubot-item.active>.qubot-items-content .controls {
+        min-width: 96px;
+    }
+    .qubot-item.images .qubot-item.active>.qubot-items-content .controls.single {
+        min-width: 32px;
+    }
+
+.qubot-item.buttons {
+    align-items: flex-start;
+}
+    .qubot-item.buttons>.qubot-items-content {
+        padding: 6px;
+        min-height: 70px;
+        align-items: center;
+        overflow: hidden;
+    }
+        .qubot-item.buttons:hover .qubot-items-content,
+        .qubot-item.buttons.active .qubot-items-content {
+            border-style: dashed;
+            border-color: #c5c5c5;
+        }
+            .qubot-item.buttons .qubot-item.active>.qubot-items-content {
+                border-style: solid;
+                border-color: var(--active-clr);
+            }
+            .qubot-item.buttons .qubot-item:not(.active):hover>.qubot-items-content {
+                border-style: solid;
+                border-color: var(--hover-clr);
+            }
+        .qubot-item.buttons .qubot-item:hover>.qubot-items-content {
+            border-style: solid;
+            border-color: var(--hover-clr);
+        }
+    
+    .qubot-item.buttons>.qubot-items-content .buttons {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+        .qubot-item.buttons>.qubot-items-content .buttons .qubot-button {
+            width: 100%;
+            margin: 0 4px;
+        }
+        .qubot-item.buttons>.qubot-items-content .buttons .qubot-add-button {
+            width: 100%;
+            margin: 0 2px;
+            padding: 0;
+        }
+            .qubot-item.buttons>.qubot-items-content .buttons .qubot-add-button:not(:first-child):last-child {
+                max-width: 42px;
+            }
+
+.qubot-item.buttons .qubot-item.qubot-buttons-row {
+    align-items: flex-start;
+    display: flex;
+    flex-wrap: nowrap;
+    margin: 4px 0;
+    padding: 0;
+}
+    .qubot-item.buttons .qubot-item.qubot-buttons-row .qubot-add-button .qudata-svg {
+        margin: 5px 0;
+    }
+    .qubot-item.buttons .qubot-item.qubot-buttons-row .qubot-add-button .qubot-items-content {
+        border-radius: 1rem;
+        height: 38px;
+    }
+    .qubot-item.buttons .qubot-item.qubot-add-button:hover .qubot-items-content {
+        border-style: dashed;
+        background-color: var(--hover-btn-clr);
+    }
+
+        .qubot-item.buttons .qubot-item.qubot-buttons-row .qubot-item.button {
+            border-style: solid;
+            border-width: 1px;
+            border-color: gray;
+            border-radius: 1rem;
+            width: 100%;
+            min-width: 0;
+            overflow: hidden;
+            padding: 0;
+            height: 38px;
+            transition-duration: var(--anim-duration-slow);
+            margin: 0 2px;
+            display: flex;
+            background-color: transparent;
+        }
+            .qubot-item.buttons .qubot-item.qubot-buttons-row .qubot-item.button input {
+                cursor: pointer;
+            }
+            .qubot-item.buttons .qubot-item.qubot-buttons-row .qubot-item.button.active {
+                border-color: var(--active-clr);
+            }
+            .qubot-item.buttons .qubot-item.qubot-buttons-row .qubot-item.button:hover {
+                border-color: var(--hover-clr);
+            }
+            .qubot-item.buttons .qubot-item.qubot-buttons-row .qubot-item.button:not(.active):hover input {
+                /* background-color: var(--background-color); */
+            }
+            .qubot-item.buttons .qubot-item.qubot-buttons-row .qubot-item.button.active {
+                width: 250%;
+                min-width: 180px;
+                box-shadow: none;
+                display: flex;
+                /* background-color: transparent; */
+            }
+                .qubot-item.buttons .qubot-item.qubot-buttons-row .qubot-item.button.active input {
+                    cursor: text;
+                }
+            .qubot-item.buttons .qubot-item.qubot-buttons-row .qubot-item.button:hover input,
+            .qubot-item.buttons .qubot-item.qubot-buttons-row .qubot-item.button.active input {
+                border-radius: 0;
+            }
+        .qubot-item.buttons .qubot-item.qubot-buttons-row .qubot-item.button input {
+            width: 100%;
+            text-align: center;
+            border-radius: 1rem;
+            transition-duration: var(--anim-duration-slow);
+            background-color: white;
+        }
+        .qubot-item.buttons .qubot-item.qubot-buttons-row .qubot-item.button .controls {
+            padding: 0;
+            flex-direction: row;
+            height: 100%;
+        } 
+        .qubot-item.buttons .qubot-item.qubot-buttons-row .qubot-item.button:hover .controls,
+        .qubot-item.buttons .qubot-item.qubot-buttons-row .qubot-item.button:hover .drag {
+            width: 0;
+            min-width: 0;
+        }
+        .qubot-item.buttons .qubot-item.qubot-buttons-row .qubot-item.button.active .controls {
+            min-width: 64px;
+        }
+        .qubot-item.buttons .qubot-item.qubot-buttons-row .qubot-item.button.active:hover .controls.single,
+        .qubot-item.buttons .qubot-item.qubot-buttons-row .qubot-item.button.active .controls.single {
+            min-width: 32px !important;
+            max-width: 32px;
+        } 
+        .qubot-item.buttons .qubot-item.qubot-buttons-row .qubot-item.button.active .drag {
+            min-width: 25px;
+        } 
+            .qubot-item.buttons .qubot-item.qubot-buttons-row .qubot-item.button.active .controls:hover {
+                min-width: 64px;
+            }
+            .qubot-item.buttons .qubot-item.qubot-buttons-row .qubot-item.button.active .controls:hover .qudata-svg {
+                width: 100%;
+            }
+
+.qudata-drag-icon {
+    cursor: grab;
+}
+.qudata-svg.qudata-drag-icon:hover {
+    transition-duration: .2s;
+    cursor: grab;
+    background-image: url('svg/editor/drag.svg');
+}
+
+.is-drag {
+    cursor: grabing !important;
+}
+textarea {
+    padding: 8px;
+    width: 100%;
+    outline: none;
+    resize: vertical;
+}
+
+.qubot-item.text .qubot-items-content code-input {
+    width: 100%;
+    border-style: none;
+    border-radius: 0 0 var(--border-rad) var(--border-rad);
+    min-height: 70px;
+    overflow: hidden;
+    font-size: 14px;
+    line-height: unset;
+}
+    .qubot-item.text .qubot-items-content code-input:first-child {
+        border-radius: var(--border-rad);
+    }
+
+    .qubot-item.text .qubot-items-content code-input textarea {
+        /* white-space: break-spaces; */
+        /* word-break: break-word; */
+    }
+
+
+.qubot-params {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* border-style: none none solid none; */
+    border-width: 2px;
+    border-color: var(--background-hover);
+    margin: -8px -12px -8px -12px;
+}
+    .qubot-params .qubot-param {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        /* margin: 2px 0; */
+        padding: 4px 8px;
+        min-height: 38px;
+        /* height: 38px; */
+        border-style: none none dashed none;
+        border-width: 1px;
+        border-color: var(--border-color);
+        transition-duration: .2s;
+        border-radius: .25rem;
+    }
+        .qubot-params .qubot-param:hover {
+            background-color: rgb(233 233 233);
+        }
+        .qubot-params .qubot-param:last-child {
+            border-style: none;
+        }
+        .qubot-params .qubot-param .name {
+            cursor: default;
+            /* margin: 0 14px 0 0; */
+            padding: 0 14px 0 0;
+            white-space: nowrap;
+            color: #6c757d;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+        
+.qubot-params input,
+.qubot-params textarea {
+    width: 100%;
+    padding: 8px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: lightgray;
+    border-radius: .25rem;
+    outline: none;
+    color: #6c757d;
+    line-height: 1.25;
+}
+.qubot-params textarea {
+    min-height: 30px;
+}
+    .qubot-params input[type='color'] {
+        width: 1px;
+        opacity: 0;
+    }
+    .qubot-params input[type='number'] {
+        text-align: center;
+        
+    }
+    .qubot-params input[type='color'] {
+        width: 1px;
+        opacity: 0;
+    }
+    .qubot-params .qubot-color {
+        width: 35px;
+        min-width: 35px;
+        height: 35px;
+        border-style: solid;
+        border-width: 4px;
+        border-radius: .45rem;
+        border-color: rgb(206 206 206);
+    }
+        .qubot-params .qubot-color:hover {
+            filter: brightness(0.9);
+        }
+
+.qubot-params select {
+    width: 100%;
+    padding: 8px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: lightgray;
+    border-radius: .25rem;
+    outline: none;
+    color: #6c757d;
+    line-height: 1.25;
+}
+
+.qubot-item>.qubot-items-content .items {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.qubot-items-content .qubot-item {
+    margin: 4px 0;
+    padding: 0;
+}
+
+.qubot-item .qubot-items-content textarea {
+    width: 100%;
+    border-style: none;
+    border-radius: 0 0 var(--border-rad) var(--border-rad);
+    min-height: 40px;
+    overflow: hidden;
+    /* font-size: 14px; */
+    line-height: unset;
+    height: 40px;
+}
+
+.qubot-item.action-slot>.qubot-items-content {
+    padding: 6px;
+    align-items: center;
+    overflow: hidden;
+}
+
+.qubot-item.action-slot {
+    align-items: flex-start;
+}
+
+    .qubot-item.action-slot:hover .qubot-items-content,
+    .qubot-item.action-slot.active .qubot-items-content {
+        border-style: dashed;
+        border-color: #c5c5c5;
+    }
+        /*.qubot-item.action-slot .qubot-item:hover .qubot-items-content,*/
+        .qubot-item.action-slot .qubot-item.active .qubot-items-content {
+            border-style: solid;
+            border-color: var(--active-clr);
+        }
+    .qubot-item.action-slot .qubot-item:hover .qubot-items-content {
+        border-style: solid;
+        border-color: var(--hover-clr);
+    }
+
+
+.qubot-item.action-load>.qubot-items-content {
+    padding: 6px;
+    align-items: center;
+    overflow: hidden;
+}
+
+.qubot-item.action-load {
+    align-items: flex-start;
+}
+
+    .qubot-item.action-load:hover .qubot-items-content,
+    .qubot-item.action-load.active .qubot-items-content {
+        border-style: dashed;
+        border-color: #c5c5c5;
+    }
+        /*.qubot-item.action-load .qubot-item:hover .qubot-items-content,*/
+        .qubot-item.action-load .qubot-item.active .qubot-items-content {
+            border-style: solid;
+            border-color: var(--active-clr);
+        }
+    .qubot-item.action-load .qubot-item:hover .qubot-items-content {
+        border-style: solid;
+        border-color: var(--hover-clr);
+    }
+
+.qubot-item.action-save>.qubot-items-content {
+    padding: 6px;
+    align-items: center;
+    overflow: hidden;
+}
+
+.qubot-item.action-save {
+    align-items: flex-start;
+}
+
+    .qubot-item.action-save:hover .qubot-items-content,
+    .qubot-item.action-save.active .qubot-items-content {
+        border-style: dashed;
+        border-color: #c5c5c5;
+    }
+        /*.qubot-item.action-save .qubot-item:hover .qubot-items-content,*/
+        .qubot-item.action-save .qubot-item.active .qubot-items-content {
+            border-style: solid;
+            border-color: var(--active-clr);
+        }
+    .qubot-item.action-save .qubot-item:hover .qubot-items-content {
+        border-style: solid;
+        border-color: var(--hover-clr);
+    }
+
+
+/* action-model */
+.qubot-item.action-model>.qubot-items-content {
+    padding: 6px;
+    align-items: center;
+    overflow: hidden;
+}
+
+.qubot-item.action-model {
+    align-items: flex-start;
+}
+
+    .qubot-item.action-model:hover .qubot-items-content,
+    .qubot-item.action-model.active .qubot-items-content {
+        border-style: dashed;
+        border-color: #c5c5c5;
+    }
+        /*.qubot-item.action-model .qubot-item:hover .qubot-items-content,*/
+        .qubot-item.action-model .qubot-item.active .qubot-items-content {
+            border-style: solid;
+            border-color: var(--active-clr);
+        }
+    .qubot-item.action-model .qubot-item:hover .qubot-items-content {
+        border-style: solid;
+        border-color: var(--hover-clr);
+    }
+
+.qubot-item.action-operator>.qubot-items-content {
+    padding: 6px;
+    align-items: center;
+    overflow: hidden;
+}
+
+.qubot-item.action-operator {
+    align-items: flex-start;
+}
+
+    .qubot-item.action-operator:hover .qubot-items-content,
+    .qubot-item.action-operator.active .qubot-items-content {
+        border-style: dashed;
+        border-color: #c5c5c5;
+    }
+        /*.qubot-item.action-operator .qubot-item:hover .qubot-items-content,*/
+        .qubot-item.action-operator .qubot-item.active .qubot-items-content {
+            border-style: solid;
+            border-color: var(--active-clr);
+        }
+    .qubot-item.action-operator .qubot-item:hover .qubot-items-content {
+        border-style: solid;
+        border-color: var(--hover-clr);
+    }
+
+.qubot-item .qubot-items-content .qubot-check {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 50%;
+    padding: 0;
+}
+.qubot-item.action-event .qubot-items-content .qubot-check {
+    background-color: white;
+    margin: 0;
+    padding-right: 12px;
+}
+.qubot-item.action-event .qubot-items-content .qubot-check label {
+    padding-right: 8px;
+    white-space: nowrap;
+    margin: 0;
+    font-size: 14px;
+}
+
+.qubot-editor .qubot-editor-body .state-editor .action.qubot-if {
+    padding: 6px;
+    min-height: 70px;
+    align-items: center;
+    overflow: hidden;
+    width: 100%;
+    border-style: dashed;
+    border-width: 1px;
+    border-color: #c5c5c5;
+    border-radius: .45rem;
+    display: flex;
+    flex-direction: row;
+    transition-duration: var(--anim-duration);
+    background-color: var(--console-menu-color);
+    position: relative;
+    overflow: hidden;
+}
+    .qubot-editor .qubot-editor-body .state-editor .action.qubot-if .actions {
+        margin: 6px 0 0 0;
+        padding: 6px;
+        border-style: dashed;
+        border-width: 1px;
+        border-color: #c5c5c5;
+        border-radius: .45rem;
+        display: flex;
+        transition-duration: var(--anim-duration);
+        background-color: rgb(225 225 225 / 35%);
+        overflow: hidden;
+    }
+
+.qubot-item.action-if>.qubot-items-content {
+    padding: 6px;
+    align-items: center;
+    overflow: hidden;
+}
+
+.qubot-item.action-if {
+    align-items: flex-start;
+}
+
+    .qubot-item.action-if:hover .qubot-items-content,
+    .qubot-item.action-if.active .qubot-items-content {
+        border-style: dashed;
+        border-color: #c5c5c5;
+    }
+        /*.qubot-item.action-if .qubot-item:hover .qubot-items-content,*/
+        .qubot-item.action-if .qubot-item.active .qubot-items-content {
+            border-style: solid;
+            border-color: var(--active-clr);
+        }
+    .qubot-item.action-if .qubot-item:hover .qubot-items-content {
+        border-style: solid;
+        border-color: var(--hover-clr);
+    }
+
+.qubot-action-if {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    /* align-items: center; */
+    overflow: hidden;
+    width: 100%;
+    padding: 4px 0;
+}
+
+    .qubot-action-if .drag {
+        background-size: 25px;
+        width: 0;
+        min-width: 0;
+        height: 40px;
+        margin: 0;
+        transition-duration: var(--anim-duration-slow);
+        transition-delay: var(--anim-duration);
+        cursor: grab;
+        opacity: 0;
+        background-position: left center;
+    }
+        .qubot-action-if .drag:hover {
+            filter: contrast(5);
+        }
+    
+    /*.qubot-action-if:hover>.drag,*/
+    .qubot-action-if.active>.drag {
+        min-width: 25px;
+        width: 25px;
+        opacity: 1;
+    }
+
+    .qubot-action-if .qubot-items-content {
+        width: 100%;
+        border-style: dashed;
+        border-width: 1px;
+        border-color: #c5c5c5;
+        border-radius: .45rem;
+        display: flex;
+        flex-direction: row;
+        transition-duration: var(--anim-duration);
+        background-color: var(--console-menu-color);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .qubot-action-if .controls {
+        width: 0;
+        min-width: 0;
+        margin: 0;
+        transition-duration: var(--anim-duration-slow);
+        transition-delay: var(--anim-duration);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+        .qubot-action-if .controls .qudata-svg {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            cursor: pointer;
+            border-radius: .45rem;
+            margin: 0;
+            background-size: 25px;
+            opacity: 0;
+            transition-duration: var(--anim-duration-slow);
+            height: 35px;
+        }
+        
+            .qubot-action-if .controls .qudata-svg:hover {
+                background-color: var(--background-hover);
+            }
+
+            .qubot-action-if .controls .qudata-svg:active,
+            .qubot-action-if .controls .qudata-svg:focus {
+                transform: scale(0.9);
+            }
+
+        /*.qubot-action-if:hover>.controls .qudata-svg,*/
+        .qubot-action-if.active>.controls .qudata-svg {
+            opacity: 1;
+            width: 100%;
+        }
+    
+    /*.qubot-action-if:hover>.controls,*/
+    .qubot-action-if.active>.controls {
+        width: 45px;
+        padding: 0 0 0 4px;
+    }
+
+#qubot-phantom {
+    /* max-height: 70px; */
+    width: 100%;
+    border-style: solid;
+    border-radius: .45rem;
+    border-width: 1px;
+    border-color: var(--background-hover);
+    margin: 4px 0;
+}
+
+.qubot-items-content .notice {
+    background: transparent;
+    border: none;
+    border-width: 0;
+    box-shadow: 0;
+    margin: 0;
+    padding: 0;
+}
+#qubot-version {
+    position: absolute;
+    font-size: 10px;
+    right: 25px;
+    background-color: var(--border-color);
+    cursor: default;
+    opacity: 0.5;
+    padding: 0 8px;
+    white-space: nowrap;
+    bottom: 0;
+    left: 0;
+    right: auto;
+    transition-duration: .2s;
+    transition-property: opacity, transform;
+}
+#qubot-version.hide {
+    opacity: 0;
+    transition-duration: 0;
+}
+#qubot-version:hover {
+    opacity: 1;
+    transform: scale(1.2) translate(5%, -7%);
+}
+#qubot-version.left {
+    border-radius: 0 .45rem 0 0;
+}
+#qubot-version.right {
+    border-radius: .45rem 0 0 0;
+}
+
+.qubot-item.action-intent>.qubot-items-content {
+    padding: 6px;
+    align-items: center;
+    overflow: hidden;
+}
+
+.qubot-item.action-intent {
+    align-items: flex-start;
+}
+
+    .qubot-item.action-intent:hover .qubot-items-content,
+    .qubot-item.action-intent.active .qubot-items-content {
+        border-style: dashed;
+        border-color: #c5c5c5;
+    }
+        /*.qubot-item.action-intent .qubot-item:hover .qubot-items-content,*/
+        .qubot-item.action-intent .qubot-item.active .qubot-items-content {
+            border-style: solid;
+            border-color: var(--active-clr);
+        }
+    .qubot-item.action-intent .qubot-item:hover .qubot-items-content {
+        border-style: solid;
+        border-color: var(--hover-clr);
+    }
+
+/* --------------------------- select --------------------------- */
+
+.qubot-select {
+    border-style: solid;
+    border-width: 1px;
+    border-color: lightgray;
+    border-radius: .25rem;
+    outline: none;
+    color: #6c757d;
+    /* line-height: 1.25; */
+    transition-duration: .2s;
+    position: relative;
+    height: 36px;
+    background-color: white;
+    width: 100%;
+    padding: 0 8px;
+}
+
+    .qubot-select.disabled {
+        background-color: transparent;
+    }
+    .qubot-select:not(.disabled):hover {
+        background-color: #f7f7f7;
+    }
+
+    .qubot-select .qubot-select-value  {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        padding: 6px 8px;
+        border-radius: .25rem;
+        /*min-width: 175px;*/
+    }
+        .qubot-select .qubot-select-value:hover {
+            background-color: #f7f7f7;
+        }
+
+    .qubot-select .qubot-icon,
+    .qubot-select-items .qubot-icon {
+        cursor: default;
+        background-repeat: no-repeat;
+        width: 32px;
+        height: 100%;
+        filter: opacity(0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+        .qubot-select .qubot-icon.qubot-svg-unicode,
+        .qubot-select-items .qubot-icon.qubot-svg-unicode {
+            filter: opacity(1);
+        }
+
+    .qubot-select .qubot-text,
+    .qubot-select-items .qubot-text {
+        cursor: default;
+        padding-left: 8px;
+        background-color: inherit;
+        width: 100%;
+        border-style: none;
+        line-height: normal;
+    }
+
+    .qubot-select-items {
+        display: none;
+        position: absolute;
+        /* padding: 6px 8px; */
+        border-style: solid;
+        border-width: 1px;
+        border-color: lightgray;
+        border-radius: .25rem;
+        outline: none;
+        color: #6c757d;
+        /* line-height: 1.25; */
+        transition: opacity .2s;
+        top: 115%;
+        left: 0;
+        /* width: 100%; */
+        flex-direction: column;
+        overflow: hidden;
+        background-color: white;
+        font-size: 12px;
+    }
+    .qubot-select-items.show {
+        display: flex;
+        z-index: 100;
+    }
+
+        .qubot-select-items .qubot-select-item  {
+            padding: 6px 8px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .qubot-select-items .qubot-select-item:hover {
+            background-color: #f7f7f7;
+        }
+
+/* --------------------------- select end --------------------------- */
+
+#wpbody-content {
+    padding-bottom: 10px;
+}

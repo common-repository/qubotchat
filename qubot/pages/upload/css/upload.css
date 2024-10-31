@@ -1,0 +1,95 @@
+/********************************************************************************
+* QuData Chat Builder Plugin.
+*
+* Page upload
+*
+* @copyright Copyright (C) 2021, qudata.com
+********************************************************************************/
+
+.console .content .pages .page-upload{
+    padding:            0px 10px 10px 20px;
+    min-width:          var(--page-width);
+    width:              800px;
+    display:            flex;   
+    flex-direction:     column;
+}
+
+.console .content .pages .page-upload  .group {
+    margin-top:         10px;
+}
+
+.console .content .pages .page-upload  .group .label{
+    font-size:          18px;
+    height:             40px;    
+    margin-right:       10px;
+    display:            flex;
+    flex-direction:     row;
+    align-items:        center;
+}
+
+.console .content .pages .page-upload .group .input{
+    font-size:          18px;
+    height:             40px;
+    width:              200px;    
+}
+
+.console .content .pages .page-upload  .group .checkbox{
+    width:              20px;
+    height:             20px;    
+}
+.console .content .pages .page-upload  .group  .checkbox::before{
+    width:  inherit;
+    height: inherit;    
+}
+
+
+.console .content .pages .page-upload  .group .select{
+    font-size:          18px;
+    height:             40px;
+    width:              200px;    
+}
+
+.console .content .pages .page-upload  .group .pages-list{
+    display:            flex;   
+    flex-direction:     row; 
+    flex-wrap:          wrap;
+}
+.console .content .pages .page-upload  .group .pages-list .item{
+    margin-right:       20px;
+    display:            flex;    
+    flex-direction:     row;
+    align-items:        center;    
+}
+
+.console .content .pages .page-upload  .group .pages-list .item .checkbox{
+    width:              20px;
+    height:             20px;    
+}
+.console .content .pages .page-upload  .group .pages-list .item .checkbox::before{
+    width:  inherit;
+    height: inherit;    
+}
+
+.console .content .pages .page-upload  .group  .input{
+    width:              200px;
+    height:             40px;    
+}
+
+
+.console .content .pages .page-upload  .button{
+    font-size:          18px;
+    height:            40px;
+    width:             200px;
+    background-color: white;          
+    border:             1px solid var(--qubot-editor-border-color);        
+    border-radius:      10px;
+    margin:             0px 2px;
+    padding:            2px;       
+    text-align:         center;     
+}
+.console .content .pages .page-upload  .button:hover{
+    border: 2px solid red;
+}
+.console .content .pages .page-upload .button:active{        
+    background-color: rgb(255, 213, 213);
+}

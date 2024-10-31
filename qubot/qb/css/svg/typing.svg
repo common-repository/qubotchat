@@ -1,0 +1,9 @@
+﻿<svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+<g fill="none" fill-rule="evenodd">
+<rect y="3" width="36" height="30" rx="15" fill="#f3f2f2">
+</rect>
+<circle fill="#767676" cx="9.5" cy="19.5" r="2.5">
+    <animateTransform attributeName="transform" type="translate" keyTimes="0; 0.4; 0.6; 0.8; 1" calcMode="spline" keySplines="0 0 1 1; 0.65 0.15 0.35 0.85; 0.65 0.15 0.35 0.85; 0.65 0.15 0.35 0.85" values="0 0; 0 0; 0 -3; 0 3; 0 0" dur="1800ms" begin="0" repeatCount="indefinite"></animateTransform></circle><circle fill="#767676" cx="17.5" cy="19.5" r="2.5"><animateTransform attributeName="transform" type="translate" keyTimes="0; 0.4; 0.6; 0.8; 1" calcMode="spline" keySplines="0 0 1 1; 0.65 0.15 0.35 0.85; 0.65 0.15 0.35 0.85; 0.65 0.15 0.35 0.85" values="0 0; 0 0; 0 -3; 0 3; 0 0" dur="1800ms" begin="120ms" repeatCount="indefinite"></animateTransform></circle><circle fill="#767676" cx="25.5" cy="19.5" r="2.5"><animateTransform attributeName="transform" type="translate" keyTimes="0; 0.4; 0.6; 0.8; 1" calcMode="spline" keySplines="0 0 1 1; 0.65 0.15 0.35 0.85; 0.65 0.15 0.35 0.85; 0.65 0.15 0.35 0.85" values="0 0; 0 0; 0 -3; 0 3; 0 0" dur="1800ms" begin="240ms" repeatCount="indefinite">
+    </animateTransform>
+</circle>
+</g></svg>

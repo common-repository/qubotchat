@@ -1,0 +1,118 @@
+/* Code-Input Compatibility */
+/* By WebCoder49 */
+/* First Published on CSS-Tricks.com */
+/* Copyright (c) 2021 WebCoder49 */
+/* Licensed under MIT (https://github.com/WebCoder49/code-input/blob/main/LICENSE) */
+
+
+code-input {
+  /* Allow other elems to be inside */
+  /* border:                1px solid rgb(128, 128, 128); */
+  position:             relative;
+  top:                  0;
+  left:                 0;
+  display:              block;
+
+  /* Normal inline styles */
+  /* padding:              8px; */
+  margin:               0px 0px 2px 0px;
+  width:                100%;  /*calc(100% - 16px);*/
+  min-height: 40px;
+  /* height:               20px; */
+  font-size: 14px !important;
+  font-family:          monospace;
+  line-height:          1.2;
+  tab-size:             2;
+  caret-color:         darkgrey;
+  white-space:          pre;
+  scrollbar-width:      thin;
+}
+
+code-input textarea, code-input:not(.code-input_pre-element-styled) pre code, code-input.code-input_pre-element-styled pre {
+  /* Both elements need the same text and space styling so they are directly on top of each other */
+  margin:               0 !important;
+  padding:              5px !important; /* var(--padding, 16px)!important; */
+  border:               0;
+  border-radius:        0 !important;
+  width:                calc(100% - 10px)!important;
+  min-height:           20px !important;
+  /* font-size: 14px !important; */
+  height: calc(100% - 10px) !important;  /*calc(100% - (var(--padding, 16px)*2))!important;*/
+}
+code-input:not(.code-input_pre-element-styled) pre, code-input.code-input_pre-element-styled pre code {
+  margin:               0 !important;
+  border:               0 !important;
+  border-radius:        0 !important;
+  padding:              0  !important;
+  overflow-y:             hidden !important; /* auto!important;*/
+  width:                100% !important;
+  min-height:           20px !important;
+  height:               100% !important;
+  /* white-space: break-spaces; */
+  /* word-break: break-word; */
+}
+code-input textarea, code-input pre, code-input pre * {
+  /* Also add text styles to highlighing tokens */
+  font-size:            inherit !important;
+  font-family:          inherit !important;
+  line-height:          inherit !important;
+  tab-size:             inherit !important;
+}
+
+code-input textarea, code-input pre {
+  /* In the same place */
+  position:             absolute;
+  top:                  0;
+  left:                 0;
+  resize:             none;
+  border:               0 !important;
+  border-radius:        0 !important;
+  box-shadow:           none !important;
+  box-sizing:           content-box !important;
+}
+
+code-input textarea:focus{
+  border:               0 !important;
+  border-radius:        0 !important;
+  box-shadow:           none !important;  
+}
+
+
+/* Move the textarea in front of the result */
+code-input textarea {
+  z-index: 1;
+}
+code-input pre {
+  z-index: 0;
+}
+
+/* Make textarea almost completely transparent */
+code-input textarea {
+  color:                transparent;
+  background:           transparent;
+  caret-color:          inherit !important; /* Or choose your favourite color */
+}
+
+/* Can be scrolled */
+code-input textarea, code-input pre {
+  overflow-y: hidden !important; /*auto!important;*/
+  overflow-x:           auto !important; /*auto!important;*/
+  scrollbar-width:      thin;
+  resize:               none;
+  white-space:          inherit;
+  word-spacing:         normal;
+  /*
+  word-break:           break-all !important;  
+  white-space:          pre-wrap  !important;
+  word-wrap:            break-word !important;   
+*/
+}
+
+/* No resize on textarea; stop outline */
+code-input textarea {
+  outline:              none! important;
+}
+
+code-input[disabled=true] pre {
+  background-color: #f6f5f5;
+}
